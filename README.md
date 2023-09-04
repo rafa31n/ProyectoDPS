@@ -24,4 +24,4 @@ es decir, sólo son posibles los usos y finalidades que no tengan carácter come
 ## Enlaces
 
 - Tablero en Trello: [https://trello.com/invite/b/aqbPbExz/ATTI6b3a6ad044c1a3b8d2bd1290ef9500906273B485/scrum-etapa-1](url)
-- Enlace mockups: [[https://www.figma.com/file/CoYlB7qhkFUNoOEeFx12I6/Plan2Plate?type=design&mode=design&t=nQwbpwdXA4wSh3Cg-1](https://www.figma.com/file/CoYlB7qhkFUNoOEeFx12I6/Plan2Plate?type=design&mode=design&t=nQwbpwdXA4wSh3Cg-1)https://www.figma.com/file/CoYlB7qhkFUNoOEeFx12I6/Plan2Plate?type=design&mode=design&t=nQwbpwdXA4wSh3Cg-1](url)
+- Enlace mockups: (https://www.figma.com/file/CoYlB7qhkFUNoOEeFx12I6/Plan2Plate?type=design&t=nQwbpwdXA4wSh3Cg-6)https://www.figma.com/file/CoYlB7qhkFUNoOEeFx12I6/Plan2Plate?type=design&t=nQwbpwdXA4wSh3Cg-6
