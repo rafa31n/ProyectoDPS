@@ -1,4 +1,4 @@
-# ProyectoDPS
+# ProyectoDPS - G04T
 
 Plan2Plate tiene como objetivo ser una alternativa a solución a varios problemas con las compras y la planificación de comidas.
 Funciones:
