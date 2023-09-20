@@ -1,0 +1,11 @@
+{
+  "expo": {
+    "name": "plan2plate",
+    "slug": "plan2plate",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  },
+  "name": "plan2plate"
+}
