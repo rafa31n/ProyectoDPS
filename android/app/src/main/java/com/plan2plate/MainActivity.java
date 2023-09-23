@@ -1,7 +1,11 @@
 package com.plan2plate;
 
-import android.os.Build;
+
 import android.os.Bundle;
+import org.devio.rn.splashscreen.SplashScreen;
+
+
+import android.os.Build;
 
 import com.facebook.react.ReactActivity;
 import com.facebook.react.ReactActivityDelegate;
@@ -13,11 +17,8 @@ import expo.modules.ReactActivityDelegateWrapper;
 public class MainActivity extends ReactActivity {
   @Override
   protected void onCreate(Bundle savedInstanceState) {
-    // Set the theme to AppTheme BEFORE onCreate to support 
-    // coloring the background, status bar, and navigation bar.
-    // This is required for expo-splash-screen.
-    setTheme(R.style.AppTheme);
-    super.onCreate(null);
+      SplashScreen.show(this);  // here
+      super.onCreate(savedInstanceState);
   }
 
   /**
