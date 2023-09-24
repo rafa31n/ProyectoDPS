@@ -4,9 +4,9 @@ import { Platform } from 'react-native';
 import SplashScreen from 'react-native-splash-screen';
 
 export default function App() {
-  useEffect(() => {
+  {useEffect(() => {
     if (Platform.OS === 'android') SplashScreen.hide();
-  }, []);
+  }, []); }
 
   return (
     <Navigation />
