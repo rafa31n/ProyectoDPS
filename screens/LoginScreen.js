@@ -57,6 +57,10 @@ const LoginScreen = () => {
                 <TouchableOpacity style={styles.buttonRegister} onPress={() => navigation.navigate('Register')}>
                     <Text style={styles.textBtnRegister}>Registrate aqui</Text>
                 </TouchableOpacity>
+{/*Agregado para visualizar la pantalla de inicio*/}
+                <TouchableOpacity style={styles.buttonRegister} onPress={() => navigation.navigate('Home')}>
+                    <Text style={styles.textBtnRegister}>Pantalla de inicio</Text>
+                </TouchableOpacity>
             </View>
         </View>
     );
