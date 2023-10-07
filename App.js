@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import Navigation from './Navigation';
+import Navigation from './src/navigation/Navigation.js';
 import { Platform } from 'react-native';
 import SplashScreen from 'react-native-splash-screen';
 

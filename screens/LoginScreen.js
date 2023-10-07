@@ -1,17 +1,29 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, View, Image, TouchableOpacity, TextInput } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { Icon } from '@rneui/themed';
+import IconAD from 'react-native-vector-icons/AntDesign';
+import IconFA from 'react-native-vector-icons/FontAwesome';
+import { crearUsuario, loginUsuario } from '../src/api/api.js';
 
 const LoginScreen = () => {
     const [usuario, setUsuario] = useState('');
     const [contrasena, setContrasena] = useState('');
 
-    const iniciarSesion = () => {
-        if (usuario === 'usuario' && contrasena === 'contrasena') {
-            alert('Inicio de sesión exitoso');
-        } else {
-            alert('Credenciales incorrectas');
+    const iniciarSesion = async () => {
+        if (usuario.length > 0 && contrasena.length > 0) {
+            try {
+                const data = {
+                    username: usuario,
+                    password: contrasena
+                }
+                const loginUser = await loginUsuario(data);
+                if (loginUser.data == 'ok') {
+                    alert('Inicio de sesión correctamente.')
+                    navigation.navigate('Home')
+                }
+            } catch (error) {
+                console.error('Error al realizar la solicitud:', error);
+            }
         }
     };
 
@@ -25,8 +37,8 @@ const LoginScreen = () => {
             <View style={styles.container_body}>
 
                 <View style={styles.inputContainer}>
-                    <Icon style={styles.icon}
-                        name='person' color='#fff' />
+                    <IconFA style={styles.icon}
+                        name='user' color='#fff' size={25} />
                     <TextInput
                         style={styles.input}
                         placeholder="Usuario"
@@ -37,8 +49,8 @@ const LoginScreen = () => {
                 </View>
 
                 <View style={styles.inputContainer}>
-                    <Icon style={styles.icon}
-                        name='lock' color='#fff' />
+                    <IconFA style={styles.icon}
+                        name='lock' color='#fff' size={25} />
                     <TextInput
                         style={styles.input}
                         placeholder="Contraseña"
@@ -53,13 +65,18 @@ const LoginScreen = () => {
                     <Text style={styles.buttonText}>Iniciar Sesión</Text>
                 </TouchableOpacity>
 
+                <TouchableOpacity style={styles.buttonGoogle} onPress={() => navigation.navigate('Google')}>
+                    <View style={styles.iconWrapper}>
+                        <IconAD style={styles.icon}
+                            name='google' color='#fff' size={20} />
+                    </View>
+                    <Text style={styles.textGoogle}>Iniciar sesión con Google</Text>
+                </TouchableOpacity>
+
+
                 <Text style={styles.text}>¿No tienes cuenta?</Text>
                 <TouchableOpacity style={styles.buttonRegister} onPress={() => navigation.navigate('Register')}>
                     <Text style={styles.textBtnRegister}>Registrate aqui</Text>
-                </TouchableOpacity>
-{/*Agregado para visualizar la pantalla de inicio*/}
-                <TouchableOpacity style={styles.buttonRegister} onPress={() => navigation.navigate('Home')}>
-                    <Text style={styles.textBtnRegister}>Pantalla de inicio</Text>
                 </TouchableOpacity>
             </View>
         </View>
@@ -99,7 +116,7 @@ const styles = StyleSheet.create({
     },
     container_body: {
         width: '100%',
-        height: '50%',
+        height: '70%',
         backgroundColor: '#006294',
         borderTopLeftRadius: 80,
         borderTopRightRadius: 0,
@@ -109,8 +126,8 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     imgLogo: {
-        width: 300,
-        height: 300,
+        width: 200,
+        height: 200,
     },
     text: {
         textAlign: 'center',
@@ -140,6 +157,25 @@ const styles = StyleSheet.create({
         padding: 5,
         flex: 0.9,
         borderRadius: 15,
+        color: '#fff',
+    },
+    buttonGoogle: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: '#4285F4', // Color de fondo de Google
+        paddingVertical: 10,
+        paddingHorizontal: 15,
+        borderRadius: 5,
+        marginTop: 5,
+    },
+    iconWrapper: {
+        marginRight: 10,
+    },
+    textGoogle: {
+        color: 'white',
+        fontWeight: 'bold',
     },
 });
 export default LoginScreen;
+
