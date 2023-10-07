@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Navigation from './src/navigation/Navigation.js';
 import { Platform } from 'react-native';
 import SplashScreen from 'react-native-splash-screen';
+import 'react-native-gesture-handler';
 
 export default function App() {
   {useEffect(() => {
