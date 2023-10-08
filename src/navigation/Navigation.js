@@ -8,13 +8,12 @@ import HomeScreen from '../../screens/HomeScreen';
 import GoogleScreen from '../../screens/GoogleScreen';
 import RecipesScreen from '../../screens/RecipesScreen';
 import IngredientList from '../../screens/IngredientListScreen';
-import ListasScreen from '../../screens/ListScreen';
+
 import RecetasScreen from '../../screens/RecipesScreen';
 import BibliotecaScreen from '../../screens/BibliotecaScreen';
 import MisRecetasScreen from '../../screens/MisRecetasScreen';
 
 const Stack = createNativeStackNavigator();
-
 
 const Navigation = () => {
     return (
@@ -22,16 +21,13 @@ const Navigation = () => {
             <Stack.Navigator
                 screenOptions={{ headerShown: false }}
             >
-                 <Stack.Screen name='Login' component={LoginScreen} />
+                <Stack.Screen name='Login' component={LoginScreen} />
                 <Stack.Screen name='Home' component={HomeScreen} />
-               
-                <Stack.Screen name='AgregarRecetas' component={RecipesScreen}/>
-                <Stack.Screen name='AgregarIngredientes' component={IngredientList}/>
-
-                    <Stack.Screen name='Google' component={GoogleScreen} />
+                <Stack.Screen name='AgregarRecetas' component={RecipesScreen} />
+                <Stack.Screen name='AgregarIngredientes' component={IngredientList} />
+                <Stack.Screen name='Google' component={GoogleScreen} />
                 <Stack.Screen name='Register' component={RegisterScreen} />
                 <Stack.Screen name='Agregar recetas' component={RecetasScreen} />
-                <Stack.Screen name='Lista de compra' component={ListasScreen} />
                 <Stack.Screen name='Biblioteca recetas' component={BibliotecaScreen} />
                 <Stack.Screen name='Mis recetas' component={MisRecetasScreen} />
             </Stack.Navigator>

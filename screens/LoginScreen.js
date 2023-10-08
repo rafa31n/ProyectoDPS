@@ -19,11 +19,10 @@ const LoginScreen = () => {
             try {
                 const data = {
                     username: usuario,
-                    password: contrasena
+                    contrasena: contrasena
                 }
-                const loginUser = await loginUsuario(data);
-                if (loginUser.data == 'ok') {
-                    alert('Inicio de sesión correctamente.');                    
+                const loginUser = await loginUsuario(data);                
+                if (loginUser.data.status == 200) {                                     
                     navigate(usuario);
                 } else {
                     alert('Credenciales incorrectas.');

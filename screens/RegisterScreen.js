@@ -21,6 +21,10 @@ const RegisterScreen = () => {
 
   const navigation = useNavigation();
 
+  const navigate = (parametro) => {
+    navigation.navigate('Home', { parametro });
+  };
+
   const registrarse = async () => {
     if (contrasena == confirmarContrasena && contrasena.length > 0) {
       const nombre = nombres.split(' ');
@@ -28,18 +32,19 @@ const RegisterScreen = () => {
 
       try {
         const data = {
+          id_usuario: 0,
           primer_nombre: nombre[0],
           segundo_nombre: nombre[1],
           primer_apellido: apellido[0],
           segundo_apellido: apellido[1],
           username: usuario,
-          correo: correo,
-          password: contrasena
-        }        
+          contrasena: contrasena,
+          correo: correo
+        }
         const crearUser = await crearUsuario(data);
-        if (crearUser.data == 'ok') {
-          alert('Usuario creado con exito')
-          navigation.navigate('Home')
+        if (crearUser.data.status == 200) {
+          //alert('Usuario creado con exito')
+          navigate(usuario);
         }
       } catch (error) {
         console.error('Error al realizar la solicitud:', error);

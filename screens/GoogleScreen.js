@@ -1,9 +1,11 @@
-import React from 'react';
-import { Button, Text, View, StyleSheet } from 'react-native';
+import React, { useEffect } from 'react';
+import { Button, Text, View, StyleSheet, TouchableOpacity } from 'react-native';
 import { useAuth0, Auth0Provider } from 'react-native-auth0';
+import { useNavigation } from "@react-navigation/native";
 
 const Screen = () => {
     const { authorize, clearSession, user, error, isLoading } = useAuth0();
+    const navigation = useNavigation();
 
     const onLogin = async () => {
         try {
@@ -27,16 +29,22 @@ const Screen = () => {
 
     const loggedIn = user !== undefined && user !== null;
 
+    const navigate = (parametro) => {
+        console.log(parametro)
+        navigation.navigate('Home', { parametro });
+    };
+
+    if (loggedIn === true) {
+        navigate(user.name);
+    }
+
     return (
         <View style={styles.container}>
-            {loggedIn && <Text>You are logged in as {user.email}</Text>}
-            {!loggedIn && <Text>You are not logged in</Text>}
-            {error && <Text>{error.message}</Text>}
-
             <Button
                 onPress={loggedIn ? onLogout : onLogin}
-                title={loggedIn ? 'Log Out' : 'Log In'}
+                title={loggedIn ? 'Cerrar sesión' : 'Iniciar sesión'}
             />
+            <TouchableOpacity></TouchableOpacity>
         </View>
     );
 };

@@ -1,14 +1,12 @@
 import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
 import { useRoute } from '@react-navigation/native';
 import { useNavigation } from "@react-navigation/native";
-import { useNavigation } from "@react-navigation/native";
-
 
 const HomeScreen = () => {
     const navigation = useNavigation();
     const route = useRoute();
     const parametro = route.params?.parametro;
-    console.log(parametro)
+    //console.log(parametro)
     return (
         <View style={styles.container}>
             <View style={styles.container_body}>
@@ -16,7 +14,7 @@ const HomeScreen = () => {
                 <Text style={styles.articleText}>Lista de compra</Text>
                 <View style={styles.articleContainer}>
                     <Text style={styles.headText}>Parece que aun no tienes listas creadas.</Text>
-                    <TouchableOpacity style={styles.buttons} onPress={() => navigation.navigate('Lista de compra')}>
+                    <TouchableOpacity style={styles.buttons} onPress={() => navigation.navigate('AgregarIngredientes')}>
                         <Text>Añadir una lista</Text>
                     </TouchableOpacity>
                 </View>
@@ -39,7 +37,7 @@ const HomeScreen = () => {
                 <Text style={styles.articleText}>Mis recetas</Text>
                 <View style={styles.articleContainer}>
                     <Text style={styles.headText}>De momento no hay recetas favoritas.</Text>
-                    <TouchableOpacity style={styles.buttons} onPress={()=>navigation.navigate('AgregarRecetas')} onPress={() => navigation.navigate('Mis recetas')}>
+                    <TouchableOpacity style={styles.buttons} onPress={() => navigation.navigate('AgregarRecetas')}>
                         <Text>Añadir una receta</Text>
                     </TouchableOpacity>
                 </View>
@@ -57,7 +55,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
     },
     headerText: {
-        fontSize: 24, 
+        fontSize: 24,
         fontWeight: 'bold',
         marginBottom: 10,
         marginTop: 10,
