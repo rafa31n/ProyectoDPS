@@ -12,6 +12,7 @@ import IngredientList from '../../screens/IngredientListScreen';
 import RecetasScreen from '../../screens/RecipesScreen';
 import BibliotecaScreen from '../../screens/BibliotecaScreen';
 import MisRecetasScreen from '../../screens/MisRecetasScreen';
+import ProfileScreen from './screens/ProfileScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -30,7 +31,9 @@ const Navigation = () => {
                 <Stack.Screen name='Agregar recetas' component={RecetasScreen} />
                 <Stack.Screen name='Biblioteca recetas' component={BibliotecaScreen} />
                 <Stack.Screen name='Mis recetas' component={MisRecetasScreen} />
-            </Stack.Navigator>
+                <Stack.Screen name='Login' component={LoginScreen} />
+                <Stack.Screen name='Perfil' component={ProfileScreen}/>
+                          </Stack.Navigator>
         </NavigationContainer>
     )
 }
