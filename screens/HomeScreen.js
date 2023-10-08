@@ -5,10 +5,11 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 
 
 const HomeScreen = () =>{
-
+    const navigation = useNavigation();
     return(
         <View style={styles.container}>
         <View style={styles.container_body}>
@@ -24,7 +25,7 @@ const HomeScreen = () =>{
             <Text style={styles.articleText}>Mira las ultimas recetas</Text>
             <View style={styles.articleContainer}>
                 <Text style={styles.headText}>De momento no hay recetas</Text>
-                <TouchableOpacity style={styles.buttons}>
+                <TouchableOpacity style={styles.buttons} onPress={()=>navigation.navigate('AgregarRecetas')}>
                     <Text>Añadir una receta</Text>
                 </TouchableOpacity>
             </View>
