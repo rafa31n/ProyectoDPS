@@ -1,9 +1,4 @@
-import {
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
-  } from "react-native";
+import { StyleSheet, Text, View, Image, TouchableOpacity, TextInput } from 'react-native';
 
   const ListScreen = () =>{
     return(

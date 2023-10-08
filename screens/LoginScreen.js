@@ -1,13 +1,18 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, Image, TouchableOpacity, TextInput } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import IconAD from 'react-native-vector-icons/AntDesign';
 import IconFA from 'react-native-vector-icons/FontAwesome';
-import { crearUsuario, loginUsuario } from '../src/api/api.js';
+import { loginUsuario } from '../src/api/api.js';
 
 const LoginScreen = () => {
+    const navigation = useNavigation();
     const [usuario, setUsuario] = useState('');
     const [contrasena, setContrasena] = useState('');
+
+    const navigate = (parametro) => {
+        navigation.navigate('Home', { parametro });
+    };
 
     const iniciarSesion = async () => {
         if (usuario.length > 0 && contrasena.length > 0) {
@@ -18,8 +23,10 @@ const LoginScreen = () => {
                 }
                 const loginUser = await loginUsuario(data);
                 if (loginUser.data == 'ok') {
-                    alert('Inicio de sesión correctamente.')
-                    navigation.navigate('Home')
+                    alert('Inicio de sesión correctamente.');                    
+                    navigate(usuario);
+                } else {
+                    alert('Credenciales incorrectas.');
                 }
             } catch (error) {
                 console.error('Error al realizar la solicitud:', error);
@@ -27,7 +34,6 @@ const LoginScreen = () => {
         }
     };
 
-    const navigation = useNavigation();
     return (
         <View style={styles.container}>
             <Image
