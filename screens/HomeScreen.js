@@ -1,6 +1,7 @@
 import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
 import { useRoute } from '@react-navigation/native';
 import { useNavigation } from "@react-navigation/native";
+import { useNavigation } from "@react-navigation/native";
 
 
 const HomeScreen = () => {
@@ -38,7 +39,7 @@ const HomeScreen = () => {
                 <Text style={styles.articleText}>Mis recetas</Text>
                 <View style={styles.articleContainer}>
                     <Text style={styles.headText}>De momento no hay recetas favoritas.</Text>
-                    <TouchableOpacity style={styles.buttons} onPress={() => navigation.navigate('Mis recetas')}>
+                    <TouchableOpacity style={styles.buttons} onPress={()=>navigation.navigate('AgregarRecetas')} onPress={() => navigation.navigate('Mis recetas')}>
                         <Text>Añadir una receta</Text>
                     </TouchableOpacity>
                 </View>
