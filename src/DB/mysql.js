@@ -34,29 +34,42 @@ function conectar(){
 
 conectar();
 
-function todos(tabla){
-    return new Promise((resolve, reject) => {
-        conexion.query(`SELECT * FROM ${tabla}`, (error, result) => {
-            return error ? reject(error): resolve(result);
+function todos(tabla, id_receta){
+    if(id_receta != null){
+        if(id_receta == 0){
+            return "no hay receta seleccionada";
+        }else{
+            return new Promise((resolve, reject) => {
+                conexion.query(`SELECT * FROM ${tabla} WHERE id_receta = ${id_receta}`, (error, result) => {
+                    return error ? reject(error): resolve(result);
+                })
+            })
+        }
+    }else{
+        return new Promise((resolve, reject) => {
+            conexion.query(`SELECT * FROM ${tabla}`, (error, result) => {
+                return error ? reject(error): resolve(result);
+            })
         })
-    })
+    }  
 }
 
 function uno(tabla, id){
     return new Promise((resolve, reject) => {
-        conexion.query(`SELECT * FROM ${tabla} WHERE id_${tabla}=${id}`, (error, result) => {
+        conexion.query(`SELECT * FROM ${tabla} WHERE id = ${id}`, (error, result) => {
             return error ? reject(error): resolve(result);
         })
     })
 }
 
 function agregar(tabla, data){
-    if(data && (data.id_receta == 0 || data.id_usuario == 0)){
+    if(data && data.id == 0){
         return insertar(tabla, data);
     }else{
         return actualizar(tabla, data);
     }
 }
+
 
 function insertar(tabla, data){
     return new Promise((resolve, reject) => {
@@ -70,7 +83,7 @@ function insertar(tabla, data){
 }
 function actualizar(tabla, data){
     return new Promise((resolve, reject) => {
-        conexion.query(`UPDATE ${tabla} SET ? WHERE id_${tabla} = ?`, [data, data.id_receta] ,(error, result) => {
+        conexion.query(`UPDATE ${tabla} SET ? WHERE id = ?`, [data, data.id] ,(error, result) => {
             return error ? reject(error): resolve(result);
         })
     });
@@ -78,7 +91,8 @@ function actualizar(tabla, data){
 
 function eliminar(tabla, data){
     return new Promise((resolve, reject) => {
-        conexion.query(`DELETE FROM ${tabla} WHERE id_${tabla} = ?`, data.id_receta,(error, result) => {
+        const espacio = "id" + tabla;
+        conexion.query(`DELETE FROM ${tabla} WHERE id = ?`, data.id,(error, result) => {
             return error ? reject(error): resolve(result);
         })
     });
@@ -87,7 +101,7 @@ function eliminar(tabla, data){
 function login(tabla, data){
     return new Promise((resolve, reject) => {
         data.contrasena = sha256(data.contrasena)
-        conexion.query(`SELECT id_${tabla} FROM ${tabla} WHERE username = ? AND contrasena = ?`,[data.username, data.contrasena] ,(error, result) => {
+        conexion.query(`SELECT id FROM ${tabla} WHERE username = ? AND contrasena = ?`,[data.username, data.contrasena] ,(error, result) => {
             return error ? reject(error): resolve(result);
         })
     })

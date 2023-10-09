@@ -32,10 +32,10 @@ async function agregar(req, res, next){
     try{
         console.log(req.body);
         await controlador.agregar(req.body);
-        if(req.body.id_receta == 0){
-            mensaje = 'Item guardado con exito';
+        if(req.body.id == 0){
+            mensaje = 'Receta guardado con exito';
         }else{
-            mensaje = 'Item actualizado con exito';
+            mensaje = 'Receta actualizado con exito';
         }
         respuesta.success(req, res, mensaje, 200);
     }catch(err){
@@ -47,7 +47,7 @@ async function eliminar(req, res, next){
     try{
         console.log(req.body);
         await controlador.eliminar(req.body);
-        respuesta.success(req, res, "Item eliminardo correctamente", 200);
+        respuesta.success(req, res, "Receta eliminardo correctamente", 200);
     }catch(err){
         next(err);
     } 

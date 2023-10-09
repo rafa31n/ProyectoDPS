@@ -4,6 +4,7 @@ const config = require('./config.js');
 
 const recetas = require('./modulos/receta_rutas.js')
 const usuarios = require('./modulos/usuario_rutas.js')
+const ingredientes = require('./modulos/ingrediente_rutas.js')
 const error = require('./red/error.js')
 
 const app = express();
@@ -19,6 +20,7 @@ app.set('port', config.app.port)
 //Rutes
 app.use('/api/recetas', recetas)
 app.use('/api/usuario', usuarios)
+app.use('/api/ingrediente', ingredientes)
 app.use(error);
 
 

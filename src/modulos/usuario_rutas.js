@@ -24,7 +24,7 @@ async function agregar(req, res, next){
     try{
         console.log(req.body);
         await controlador.agregar(req.body);
-        if(req.body.id_receta == 0 || req.body.id_usuario == 0){
+        if(req.body.id == 0){
             mensaje = 'Usuario guardado con exito';
         }else{
             mensaje = 'Usuario actualizado con exito';
@@ -39,7 +39,7 @@ async function eliminar(req, res, next){
     try{
         console.log(req.body);
         await controlador.eliminar(req.body);
-        respuesta.success(req, res, "Item eliminardo correctamente", 200);
+        respuesta.success(req, res, "Usuario eliminardo correctamente", 200);
     }catch(err){
         next(err);
     } 
