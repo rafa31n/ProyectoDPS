@@ -1,7 +1,46 @@
 import { StyleSheet, Text, View, Image, TouchableOpacity, TextInput } from 'react-native';
 import Icon from 'react-native-vector-icons/Fontisto';
+import { bibliotecaRecetas } from "../src/api/api";
+import React, { useState, useEffect } from 'react';
 
 const BibliotecaScreen = () => {
+  const [idReceta, setIdReceta] = useState("");
+  const [titulo, setTitulo] = useState("");
+  const [tiempoComida, settiempoComida] = useState("");
+  const [duracion, setduracion] = useState("");
+  const [preparacion, setPreparacion] = useState("");
+
+  const [idReceta2, setIdReceta2] = useState("");
+  const [titulo2, setTitulo2] = useState("");
+  const [tiempoComida2, settiempoComida2] = useState("");
+  const [duracion2, setduracion2] = useState("");
+  const [preparacion2, setPreparacion2] = useState("");
+
+  const verRecetas = async () => {
+    try {
+      const loginUser = await bibliotecaRecetas();
+      if (loginUser.data.status == 200) {
+        console.log(loginUser.data.body)
+        setTitulo(loginUser.data.body[0].titulo)
+        settiempoComida(loginUser.data.body[0].tiempo_comida)
+        setduracion(loginUser.data.body[0].duracion)
+        setPreparacion(loginUser.data.body[0].preparacion)
+
+        setTitulo2(loginUser.data.body[1].titulo)
+        settiempoComida2(loginUser.data.body[1].tiempo_comida)
+        setduracion2(loginUser.data.body[1].duracion)
+        setPreparacion2(loginUser.data.body[1].preparacion)
+      } else {
+        alert('Credenciales incorrectas.');
+      }
+    } catch (error) {
+      console.error('Error al realizar la solicitud:', error);
+    }
+
+  }
+  useEffect(() => {
+    verRecetas();
+  }, []);
   return (
     <View>
       <Text style={styles.header}>Biblioteca de recetas</Text>
@@ -11,8 +50,10 @@ const BibliotecaScreen = () => {
         }} />
         <View style={styles.contenido}>
           <View>
-            <Text style={styles.nombre}>Nombre receta</Text>
-            <Text style={styles.descripcion}>Descripcion</Text>
+            <Text style={styles.nombre}>{titulo}</Text>
+            <Text style={styles.descripcion}>{preparacion}</Text>
+            <Text style={styles.descripcion}>{tiempoComida}</Text>
+            <Text style={styles.descripcion}>{duracion}</Text>
           </View>
           <TouchableOpacity>
             <Icon style={styles.icon}
@@ -27,8 +68,10 @@ const BibliotecaScreen = () => {
         }} />
         <View style={styles.contenido}>
           <View>
-            <Text style={styles.nombre}>Nombre receta</Text>
-            <Text style={styles.descripcion}>Descripcion</Text>
+            <Text style={styles.nombre}>{titulo2}</Text>
+            <Text style={styles.descripcion}>{preparacion2}</Text>
+            <Text style={styles.descripcion}>{tiempoComida2}</Text>
+            <Text style={styles.descripcion}>{duracion2}</Text>
           </View>
           <TouchableOpacity>
             <Icon style={styles.icon}

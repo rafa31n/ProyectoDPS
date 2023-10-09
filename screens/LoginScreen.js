@@ -10,8 +10,8 @@ const LoginScreen = () => {
     const [usuario, setUsuario] = useState('');
     const [contrasena, setContrasena] = useState('');
 
-    const navigate = (parametro) => {
-        navigation.navigate('Home', { parametro });
+    const navigate = (param1, param2) => {
+        navigation.navigate('Home', { param1, param2 });
     };
 
     const iniciarSesion = async () => {
@@ -21,9 +21,14 @@ const LoginScreen = () => {
                     username: usuario,
                     contrasena: contrasena
                 }
-                const loginUser = await loginUsuario(data);                
-                if (loginUser.data.status == 200) {                                     
-                    navigate(usuario);
+                const loginUser = await loginUsuario(data);
+                if (loginUser.data.status == 200) {
+                    const userId = loginUser.data.body[0].id;
+                    const dataUsuario = {
+                        userId: userId,
+                        username: usuario,
+                    }
+                    navigate(userId, usuario);
                 } else {
                     alert('Credenciales incorrectas.');
                 }

@@ -6,21 +6,22 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 const HomeScreen = () => {
     const navigation = useNavigation();
     const route = useRoute();
-    const parametro = route.params?.parametro;
+    const userId = route.params?.param1;
+    const username = route.params?.param2;
     //console.log(parametro)
     return (
         <View style={styles.container}>
             <View style={styles.container_body}>
                 <View style={styles.container_header}>
-                    <Text style={styles.headerText}>Bienvenido: {parametro}</Text>
-                    <TouchableOpacity onPress={() => navigation.navigate('Perfil')}>
+                    <Text style={styles.headerText}>Bienvenido: {username}</Text>
+                    <TouchableOpacity onPress={() => navigation.navigate('Perfil', { userId })}>
                         <Icon style={styles.icon}
                             name='account' color='#000' size={50} />
                     </TouchableOpacity>
                 </View>
                 <Text style={styles.articleText}>Lista de compra</Text>
                 <View style={styles.articleContainer}>
-                    <Text style={styles.headText}>Parece que aun no tienes listas creadas.</Text>
+
                     <TouchableOpacity style={styles.buttons} onPress={() => navigation.navigate('AgregarIngredientes')}>
                         <Text>Añadir una lista</Text>
                     </TouchableOpacity>
@@ -28,7 +29,6 @@ const HomeScreen = () => {
 
                 <Text style={styles.articleText}>Agregar recetas</Text>
                 <View style={styles.articleContainer}>
-                    <Text style={styles.headText}>De momento no hay recetas.</Text>
                     <TouchableOpacity style={styles.buttons} onPress={() => navigation.navigate('Agregar recetas')}>
                         <Text>Añadir una receta</Text>
                     </TouchableOpacity>
@@ -43,8 +43,8 @@ const HomeScreen = () => {
 
                 <Text style={styles.articleText}>Mis recetas</Text>
                 <View style={styles.articleContainer}>
-                    <Text style={styles.headText}>De momento no hay recetas favoritas.</Text>
-                    <TouchableOpacity style={styles.buttons} onPress={() => navigation.navigate('AgregarRecetas')}>
+
+                    <TouchableOpacity style={styles.buttons} onPress={() => navigation.navigate('Mis recetas')}>
                         <Text>Añadir una receta</Text>
                     </TouchableOpacity>
                 </View>

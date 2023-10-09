@@ -1,42 +1,89 @@
 import { StyleSheet, Text, TextInput, TouchableOpacity, View, } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { useState } from "react";
+import { agregarReceta } from "../src/api/api";
 
 const RecipesScreen = () => {
+  const navigation = useNavigation();
+  const [titulo, setTitulo] = useState("");
+  const [tiempoComida, settiempoComida] = useState("");
+  const [duracion, setduracion] = useState("");
+  const [preparacion, setPreparacion] = useState("");
 
-  const [nombre, setNombre] = useState("");
-  const [descripcion, setDescripcion] = useState("");
-  const [categoria, setCategoria] = useState("");
-  const agregarRecetas = () => {
-    if (nombre == "" || descripcion == "" || categoria == "") {
-      alert('llene los campos necesarios')
-    } else {
-      alert('Receta Añadida correctamente')
+  const agregarRecetas = async () => {
+    if (titulo.length > 0 && tiempoComida.length > 0 && duracion.length > 0 && preparacion.length > 0) {
+      try {
+        const data = {
+          id: 0,
+          titulo: titulo,
+          tiempo_comida: tiempoComida,
+          duracion: duracion,
+          preparacion: preparacion,
+          imagen: "imagen.jpg",
+          id_usuario: 0,
+        }
+        const loginUser = await agregarReceta(data);
+        if (loginUser.data.status == 200) {
+          alert('Receta agregada')
+        } else {
+          alert('Credenciales incorrectas.');
+        }
+      } catch (error) {
+        console.error('Error al realizar la solicitud:', error);
+      }
     }
   }
-  const navigation = useNavigation();
+
 
   return (
-    <View style={styles.container}>
-      <View style={styles.container_body}>
-        <View style={styles.inputContainer}>
+    <View>
+      <View>
+        <View>
           <Text style={styles.headerText}>Información de la receta</Text>
         </View>
-        <View style={styles.inputContainer}>
-          <TextInput placeholderTextColor="gray" onChangeText={(text) => setNombre(text)} style={styles.input} placeholder="Nombre de receta" />
+
+        <View style={styles.containerInputs}>
+          <TextInput
+            style={styles.input}
+            placeholder="Titulo receta"
+            onChangeText={(text) => setTitulo(text)}
+            value={titulo}
+            placeholderTextColor="#000"
+          />
+          <TextInput
+            style={styles.input}
+            placeholder="Tiempo comida"
+            onChangeText={(text) => settiempoComida(text)}
+            value={tiempoComida}
+            placeholderTextColor="#000"
+          />
+          <TextInput
+            style={styles.input}
+            placeholder="Duracion"
+            onChangeText={(text) => setduracion(text)}
+            value={duracion}
+            placeholderTextColor="#000"
+          />
+          <TextInput
+            style={styles.input}
+            placeholder="Preparacion"
+            onChangeText={(text) => setPreparacion(text)}
+            value={preparacion}
+            placeholderTextColor="#000"
+          />
+
+          <TouchableOpacity style={styles.buttonRegistrarse} onPress={agregarRecetas}>
+            <Text style={styles.textBtnRegistrarse} >Agregar Receta</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.buttonRegistrarse} onPress={() => navigation.navigate('AgregarIngredientes')}>
+            <Text style={styles.textBtnRegistrarse} >Agregar lista de compras</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.buttonRegistrarse} onPress={() => navigation.navigate('AgregarIngredientes')}>
+            <Text style={styles.textBtnRegistrarse} >Agregar ingredientes</Text>
+          </TouchableOpacity>
         </View>
-        <View style={styles.inputContainer}>
-          <TextInput placeholderTextColor="gray" onChangeText={(text) => setDescripcion(text)} style={styles.input} placeholder="Descripcion de receta" />
-        </View>
-        <View style={styles.inputContainer}>
-          <TextInput placeholderTextColor="gray" onChangeText={(text) => setCategoria(text)} style={styles.input} placeholder="Categoria de receta" />
-        </View>
-        <TouchableOpacity style={styles.buttonRegistrarse} onPress={agregarRecetas}>
-          <Text style={styles.textBtnRegistrarse} >Agregar Receta</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.buttonRegistrarse} onPress={() => navigation.navigate('AgregarIngredientes')}>
-          <Text style={styles.textBtnRegistrarse} >Agregar lista de compras</Text>
-        </TouchableOpacity>
+
+
       </View>
     </View>
   );
@@ -49,22 +96,22 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 10,
-    marginTop: 10,
+    marginTop: 30,
+    textAlign: 'center'
   },
   inputContainer: {
     flexDirection: "row",
     borderColor: "#000",
     paddingBottom: 10,
-
   },
   input: {
-    width: "60%",
+    width: '90%',
     borderWidth: 1,
-    borderColor: "black",
+    borderColor: '#000',
     padding: 5,
-    flex: 0.9,
-    color: 'black',
     borderRadius: 15,
+    color: '#000',
+    margin: 15,
   },
   container_body: {
     width: '100%',
@@ -110,5 +157,9 @@ const styles = StyleSheet.create({
   }, icon: {
     padding: 10,
   },
+  containerInputs: {
+    justifyContent: 'center', // Centrado vertical
+    alignItems: 'center',
+  }
 });
 export default RecipesScreen;
