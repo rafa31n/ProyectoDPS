@@ -26,3 +26,4 @@ es decir, sólo son posibles los usos y finalidades que no tengan carácter come
 - Tablero en Trello: https://trello.com/invite/b/aqbPbExz/ATTI6b3a6ad044c1a3b8d2bd1290ef9500906273B485/scrum-etapa-1
 - Enlace mockups: https://www.figma.com/file/CoYlB7qhkFUNoOEeFx12I6/Plan2Plate?type=design&t=nQwbpwdXA4wSh3Cg-6
 - Manual Tecnico: https://drive.google.com/file/d/10hs1nsYiCJq7CJXpIHxzgjChXD963MfK/view?usp=sharing
+- Manual de Usuario: https://www.canva.com/design/DAFvr7FeFo0/N3TPU0oAT68XKoaq20E-Vg/view?utm_content=DAFvr7FeFo0&utm_campaign=designshare&utm_medium=link&utm_source=publishsharelink
