@@ -1,18 +1,22 @@
 import React from 'react';
 import { Image, StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const ProfileScreen = () => {
   return (
     <View style={styles.container}>
-      <Image
-        source={require('../src/imgs/perfil.png')}
-        style={styles.profilePicture}
-      />
+      <Icon style={styles.icon}
+        name='account' color='#000' size={200} />
       <TouchableOpacity style={styles.buttonsphoto}>
         <Text>Cambiar foto de perfil</Text>
-        </TouchableOpacity>
+      </TouchableOpacity>
       <Text style={styles.name}>Usuario</Text>
-      <Text style={styles.email}>Correo electronico</Text>
+      <Text style={styles.email}>Nombres: </Text>
+      <Text style={styles.email}>Apellidos: </Text>
+      <Text style={styles.email}>Correo electronico: </Text>
+      <TouchableOpacity style={styles.btnCambiarInfo}>
+        <Text>Actualizar información</Text>
+      </TouchableOpacity>
     </View>
   );
 };
@@ -23,12 +27,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: '#fff',
-  },
-  profilePicture: {
-    width: 200,
-    height: 200,
-    borderRadius: 100,
-    marginBottom: 20,
   },
   name: {
     fontSize: 24,
@@ -45,7 +43,18 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 5,
-}
+    marginBottom: 15,
+  },
+  btnCambiarInfo: {
+    backgroundColor: '#70B77E',
+    width: 200,
+    height: 40,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 5,
+    color: '#fff',
+    margin: 15,
+  }
 });
 
 export default ProfileScreen;

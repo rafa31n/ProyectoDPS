@@ -1,6 +1,7 @@
 import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
 import { useRoute } from '@react-navigation/native';
 import { useNavigation } from "@react-navigation/native";
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const HomeScreen = () => {
     const navigation = useNavigation();
@@ -10,7 +11,13 @@ const HomeScreen = () => {
     return (
         <View style={styles.container}>
             <View style={styles.container_body}>
-                <Text style={styles.headerText}>Bienvenido: {parametro}</Text>
+                <View style={styles.container_header}>
+                    <Text style={styles.headerText}>Bienvenido: {parametro}</Text>
+                    <TouchableOpacity onPress={() => navigation.navigate('Perfil')}>
+                        <Icon style={styles.icon}
+                            name='account' color='#000' size={50} />
+                    </TouchableOpacity>
+                </View>
                 <Text style={styles.articleText}>Lista de compra</Text>
                 <View style={styles.articleContainer}>
                     <Text style={styles.headText}>Parece que aun no tienes listas creadas.</Text>
@@ -53,6 +60,10 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-start',
         alignItems: 'center',
         backgroundColor: '#fff',
+    },
+    container_header: {
+        flexDirection: 'row',
+        justifyContent: 'space-between'
     },
     headerText: {
         fontSize: 24,
