@@ -30,8 +30,8 @@ const Screen = () => {
     const loggedIn = user !== undefined && user !== null;
 
     const navigate = (parametro) => {
-        console.log(parametro)
-        navigation.navigate('Home', { parametro });
+        const param1 = 0;
+        navigation.navigate('Home', { param1, parametro });
     };
 
     if (loggedIn === true) {

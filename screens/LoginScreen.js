@@ -4,6 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 import IconAD from 'react-native-vector-icons/AntDesign';
 import IconFA from 'react-native-vector-icons/FontAwesome';
 import { loginUsuario } from '../src/api/api.js';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const LoginScreen = () => {
     const navigation = useNavigation();
@@ -22,13 +23,11 @@ const LoginScreen = () => {
                     contrasena: contrasena
                 }
                 const loginUser = await loginUsuario(data);
-                if (loginUser.data.status == 200) {
+                if (loginUser.data.status == 200) {                    
                     const userId = loginUser.data.body[0].id;
-                    const dataUsuario = {
-                        userId: userId,
-                        username: usuario,
-                    }
-                    navigate(userId, usuario);
+                    const datosUsuario = { username: usuario, userId: userId };
+                    AsyncStorage.setItem('datosUsuario', JSON.stringify(datosUsuario));
+                    navigate(userId, usuario);                    
                 } else {
                     alert('Credenciales incorrectas.');
                 }

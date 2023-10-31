@@ -1,19 +1,41 @@
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
 import { useRoute } from '@react-navigation/native';
 import { useNavigation } from "@react-navigation/native";
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const HomeScreen = () => {
     const navigation = useNavigation();
     const route = useRoute();
     const userId = route.params?.param1;
+    console.log(userId)
     const username = route.params?.param2;
-    //console.log(parametro)
+
+    const [datosUsuario, setDatosUsuario] = useState(null);
+    useEffect(() => {
+        AsyncStorage.getItem('datosUsuario')
+            .then((data) => {
+                if (data) {
+                    const datos = JSON.parse(data);
+                    setDatosUsuario(datos);
+                }
+            })
+            .catch((error) => {
+                console.error('Error al recuperar datos de AsyncStorage:', error);
+            });
+    }, []);
+
     return (
         <View style={styles.container}>
             <View style={styles.container_body}>
                 <View style={styles.container_header}>
-                    <Text style={styles.headerText}>Bienvenido: {username}</Text>
+                    {datosUsuario ? (
+                        <Text style={styles.headerText}>Bienvenido {datosUsuario.username}</Text>
+                    ) : (
+                        <Text style={styles.headerText}>Bienvenido</Text>
+                    )}
+
                     <TouchableOpacity onPress={() => navigation.navigate('Perfil', { userId })}>
                         <Icon style={styles.icon}
                             name='account' color='#000' size={50} />

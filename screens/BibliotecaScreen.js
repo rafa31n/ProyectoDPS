@@ -1,89 +1,94 @@
-import { StyleSheet, Text, View, Image, TouchableOpacity, TextInput } from 'react-native';
-import Icon from 'react-native-vector-icons/Fontisto';
-import { bibliotecaRecetas } from "../src/api/api";
+import { StyleSheet, Text, View, Image, TouchableOpacity, ScrollView } from 'react-native';
 import React, { useState, useEffect } from 'react';
+import IconFA from 'react-native-vector-icons/Ionicons';
+import Icon from 'react-native-vector-icons/Fontisto';
+import { useNavigation } from "@react-navigation/native";
 
 const BibliotecaScreen = () => {
-  const [idReceta, setIdReceta] = useState("");
-  const [titulo, setTitulo] = useState("");
-  const [tiempoComida, settiempoComida] = useState("");
-  const [duracion, setduracion] = useState("");
-  const [preparacion, setPreparacion] = useState("");
+  const navigation = useNavigation();
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  const [idReceta2, setIdReceta2] = useState("");
-  const [titulo2, setTitulo2] = useState("");
-  const [tiempoComida2, settiempoComida2] = useState("");
-  const [duracion2, setduracion2] = useState("");
-  const [preparacion2, setPreparacion2] = useState("");
-
-  const verRecetas = async () => {
-    try {
-      const loginUser = await bibliotecaRecetas();
-      if (loginUser.data.status == 200) {
-        console.log(loginUser.data.body)
-        setTitulo(loginUser.data.body[0].titulo)
-        settiempoComida(loginUser.data.body[0].tiempo_comida)
-        setduracion(loginUser.data.body[0].duracion)
-        setPreparacion(loginUser.data.body[0].preparacion)
-
-        setTitulo2(loginUser.data.body[1].titulo)
-        settiempoComida2(loginUser.data.body[1].tiempo_comida)
-        setduracion2(loginUser.data.body[1].duracion)
-        setPreparacion2(loginUser.data.body[1].preparacion)
-      } else {
-        alert('Credenciales incorrectas.');
-      }
-    } catch (error) {
-      console.error('Error al realizar la solicitud:', error);
-    }
-
-  }
   useEffect(() => {
-    verRecetas();
+    fetch('http://10.0.2.2:4000/api/recetas')
+      .then((response) => response.json())
+      .then((data) => {
+        setData(data);        
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error('Error al obtener los datos:', error);
+        setLoading(false);
+      });
   }, []);
+
   return (
     <View>
-      <Text style={styles.header}>Biblioteca de recetas</Text>
-      <View style={styles.container}>
-        <Image style={styles.imagen} source={{
-          uri: 'https://cdn-icons-png.flaticon.com/512/3565/3565418.png',
-        }} />
-        <View style={styles.contenido}>
-          <View>
-            <Text style={styles.nombre}>{titulo}</Text>
-            <Text style={styles.descripcion}>{preparacion}</Text>
-            <Text style={styles.descripcion}>{tiempoComida}</Text>
-            <Text style={styles.descripcion}>{duracion}</Text>
-          </View>
-          <TouchableOpacity>
-            <Icon style={styles.icon}
-              name='favorite' color='#000' size={25} />
-          </TouchableOpacity>
-        </View>
-      </View>
+      <ScrollView>
+        <View style={styles.headerContainer}>
+          <View style={styles.leftElement}>
+            <TouchableOpacity style={styles.buttonLogin} onPress={() => navigation.navigate('Home')}>
+              <IconFA style={styles.icon}
+                name='arrow-back-circle' color='#fff' size={25} />
+            </TouchableOpacity>
 
-      <View style={styles.container}>
-        <Image style={styles.imagen} source={{
-          uri: 'https://cdn-icons-png.flaticon.com/512/3565/3565418.png',
-        }} />
-        <View style={styles.contenido}>
-          <View>
-            <Text style={styles.nombre}>{titulo2}</Text>
-            <Text style={styles.descripcion}>{preparacion2}</Text>
-            <Text style={styles.descripcion}>{tiempoComida2}</Text>
-            <Text style={styles.descripcion}>{duracion2}</Text>
           </View>
-          <TouchableOpacity>
-            <Icon style={styles.icon}
-              name='favorite' color='#000' size={25} />
-          </TouchableOpacity>
+          <View style={styles.centerElement}>
+            <Text style={styles.header}>Biblioteca de recetas</Text>
+          </View>
         </View>
-      </View>
+
+        <View style={styles.scroll}>
+          {data && data.error === false && (
+            <View>
+              {data.body.map((item) => (
+                <View style={styles.container} key={item.id}>
+                  <Image style={styles.imagen} source={{
+                    uri: 'https://cdn-icons-png.flaticon.com/512/3565/3565418.png',
+                  }} />
+                  <View style={styles.contenido}>
+                    <View>
+                      <Text style={styles.tituloReceta}>{item.titulo}</Text>
+                      <Text>Tiempo de comida: {item.tiempo_comida}</Text>
+                      <Text>Duración: {item.duracion}</Text>
+                      <Text>Preparación: {item.preparacion}</Text>
+                    </View>
+                    <TouchableOpacity>
+                      <Icon style={styles.icon}
+                        name='favorite' color='#c13145' size={25} />
+                    </TouchableOpacity>
+                  </View>
+
+                </View>
+              ))}
+            </View>
+          )}
+        </View>
+
+      </ScrollView>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
+  headerContainer: {
+    backgroundColor: '#006294',
+    flexDirection: 'row',
+  },
+  leftElement: {
+    marginLeft: 16,
+    marginRight: 25,
+    marginTop: 8,
+  },
+  centerElement: {
+    marginBottom: 20,
+  },
+  header: {
+    fontWeight: 'bold',
+    fontSize: 24,
+    paddingTop: 16,
+    color: '#fff'
+  },
   container: {
     backgroundColor: '#fff',
     borderRadius: 8,
@@ -107,22 +112,16 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     alignSelf: 'center',
   },
-  nombre: {
-    fontSize: 18,
+  tituloReceta: {
     fontWeight: 'bold',
-    marginBottom: 4,
-  },
-  descripcion: {
-    fontSize: 14,
-  },
-  header: {
-    fontWeight: 'bold',
-    fontSize: 24,
-    paddingLeft: 16,
-    paddingTop: 16,
+    fontSize: 16,
   },
   icon: {
-    padding: 10,
+    margin: 10,
+  },
+  scroll: {
+    backgroundColor: '#e5f2fa',
+    height: '100%'
   },
 });
 
