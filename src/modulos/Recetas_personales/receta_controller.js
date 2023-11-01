@@ -1,9 +1,13 @@
-const db = require('../DB/mysql');
+const db = require('../../DB/mysql');
 
-const TABLA = 'ingrediente'
+const TABLA = 'receta_personal'
 
-function todos(id_receta){
-    return db.todos(TABLA, id_receta);
+function todos(){
+    return db.todos(TABLA);
+}
+
+function uno(id){
+    return db.uno(TABLA, id);
 }
 
 function agregar(body){
@@ -16,6 +20,7 @@ function eliminar(body){
 
 module.exports = {
     todos,
+    uno,
     eliminar,
     agregar
 }
