@@ -34,13 +34,13 @@ function conectar(){
 
 conectar();
 
-function todos(tabla, id_receta){
-    if(id_receta != null){
-        if(id_receta == 0){
+function todos(tabla, id){
+    if(id != null){
+        if(id == 0){
             return "no hay receta seleccionada";
         }else{
             return new Promise((resolve, reject) => {
-                conexion.query(`SELECT * FROM ${tabla} WHERE id_receta = ${id_receta}`, (error, result) => {
+                conexion.query(`SELECT * FROM ${tabla} WHERE id_foraneo = ${id}`, (error, result) => {
                     return error ? reject(error): resolve(result);
                 })
             })

@@ -5,8 +5,18 @@ const controlador = require('./ingrediente_controller');
 const router = express.Router();
 
 router.get('/:id_receta', todos);
+router.get('/uno/:id', uno);
 router.post('/', agregar);
 router.put('/', eliminar);
+
+async function uno(req, res, next){
+    try{
+        const items = await controlador.uno(req.params.id);
+        respuesta.success(req, res, items, 200);
+    }catch(err){
+        next(err);
+    } 
+};
 
 
 async function todos(req, res, next){
