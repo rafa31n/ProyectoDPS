@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1:3306
--- Tiempo de generación: 03-11-2023 a las 14:44:42
+-- Tiempo de generación: 03-11-2023 a las 22:29:04
 -- Versión del servidor: 5.7.36
 -- Versión de PHP: 7.4.26
 
@@ -49,18 +49,76 @@ INSERT INTO `biblioteca_usuario` (`id`, `id_receta_biblio`, `id_foraneo`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `elementos_lista_personal`
+--
+
+DROP TABLE IF EXISTS `elementos_lista_personal`;
+CREATE TABLE IF NOT EXISTS `elementos_lista_personal` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id_foraneo` int(11) NOT NULL,
+  `nombre` varchar(50) NOT NULL,
+  `tipo` varchar(30) NOT NULL,
+  `cantidad` varchar(30) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `id_foraneo` (`id_foraneo`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `elementos_lista_recetas`
+--
+
+DROP TABLE IF EXISTS `elementos_lista_recetas`;
+CREATE TABLE IF NOT EXISTS `elementos_lista_recetas` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id_foraneo` int(11) NOT NULL,
+  `nombre` varchar(50) NOT NULL,
+  `tipo` varchar(30) NOT NULL,
+  `cantidad` varchar(30) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `id_foraneo` (`id_foraneo`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `enlace_receta_lista`
+--
+
+DROP TABLE IF EXISTS `enlace_receta_lista`;
+CREATE TABLE IF NOT EXISTS `enlace_receta_lista` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id_receta` int(11) NOT NULL,
+  `id_foranea` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `id_foranea` (`id_foranea`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `ingredientes_biblioteca`
 --
 
 DROP TABLE IF EXISTS `ingredientes_biblioteca`;
 CREATE TABLE IF NOT EXISTS `ingredientes_biblioteca` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `id_receta_biblio` int(11) NOT NULL,
-  `nombre` int(11) NOT NULL,
-  `tipo` int(11) NOT NULL,
-  `cantidad` int(11) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  `id_foraneo` int(11) NOT NULL,
+  `nombre` varchar(40) NOT NULL,
+  `tipo` varchar(20) NOT NULL,
+  `cantidad` varchar(50) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `id_foraneo` (`id_foraneo`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4;
+
+--
+-- Volcado de datos para la tabla `ingredientes_biblioteca`
+--
+
+INSERT INTO `ingredientes_biblioteca` (`id`, `id_foraneo`, `nombre`, `tipo`, `cantidad`) VALUES
+(1, 1, 'test', 'test', '2 lb'),
+(2, 1, 'pureba', 'prueba', '2 onz');
 
 -- --------------------------------------------------------
 
@@ -86,6 +144,48 @@ CREATE TABLE IF NOT EXISTS `ingrediente_personal` (
 INSERT INTO `ingrediente_personal` (`id`, `id_foraneo`, `nombre`, `tipo`, `cantidad`) VALUES
 (6, 10, 'jamon serrano', 'alimento', '1 libra'),
 (7, 10, 'queso', 'alimento', '1 libra');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `listas_receta`
+--
+
+DROP TABLE IF EXISTS `listas_receta`;
+CREATE TABLE IF NOT EXISTS `listas_receta` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `titulo` varchar(100) NOT NULL,
+  `descripcion` varchar(200) NOT NULL,
+  `fecha` date NOT NULL,
+  `id_foraneo` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `id_foraneo` (`id_foraneo`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4;
+
+--
+-- Volcado de datos para la tabla `listas_receta`
+--
+
+INSERT INTO `listas_receta` (`id`, `titulo`, `descripcion`, `fecha`, `id_foraneo`) VALUES
+(1, 'Comida para el 15', 'Lista para recetas de todo el 15', '2023-11-03', 10),
+(2, 'Comida para el 15', 'Lista para recetas de todo el 15', '2023-11-03', 10);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `lista_personal`
+--
+
+DROP TABLE IF EXISTS `lista_personal`;
+CREATE TABLE IF NOT EXISTS `lista_personal` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `titulo` varchar(50) NOT NULL,
+  `descripcion` varchar(40) NOT NULL,
+  `fecha` date NOT NULL,
+  `id_foraneo` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `id_foraneo` (`id_foraneo`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -178,10 +278,40 @@ ALTER TABLE `biblioteca_usuario`
   ADD CONSTRAINT `biblioteca_usuario_ibfk_2` FOREIGN KEY (`id_receta_biblio`) REFERENCES `receta_biblioteca` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
+-- Filtros para la tabla `elementos_lista_personal`
+--
+ALTER TABLE `elementos_lista_personal`
+  ADD CONSTRAINT `elementos_lista_personal_ibfk_1` FOREIGN KEY (`id_foraneo`) REFERENCES `lista_personal` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Filtros para la tabla `elementos_lista_recetas`
+--
+ALTER TABLE `elementos_lista_recetas`
+  ADD CONSTRAINT `elementos_lista_recetas_ibfk_1` FOREIGN KEY (`id_foraneo`) REFERENCES `listas_receta` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Filtros para la tabla `ingredientes_biblioteca`
+--
+ALTER TABLE `ingredientes_biblioteca`
+  ADD CONSTRAINT `ingredientes_biblioteca_ibfk_1` FOREIGN KEY (`id_foraneo`) REFERENCES `receta_biblioteca` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
 -- Filtros para la tabla `ingrediente_personal`
 --
 ALTER TABLE `ingrediente_personal`
   ADD CONSTRAINT `ingrediente_personal_ibfk_1` FOREIGN KEY (`id_foraneo`) REFERENCES `receta_personal` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Filtros para la tabla `listas_receta`
+--
+ALTER TABLE `listas_receta`
+  ADD CONSTRAINT `listas_receta_ibfk_1` FOREIGN KEY (`id_foraneo`) REFERENCES `usuario` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Filtros para la tabla `lista_personal`
+--
+ALTER TABLE `lista_personal`
+  ADD CONSTRAINT `lista_personal_ibfk_1` FOREIGN KEY (`id_foraneo`) REFERENCES `usuario` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Filtros para la tabla `receta_personal`
