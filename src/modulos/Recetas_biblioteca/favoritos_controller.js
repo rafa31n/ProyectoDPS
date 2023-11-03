@@ -2,8 +2,8 @@ const db = require('../../DB/mysql');
 
 const TABLA = 'biblioteca_usuario'
 
-function todos(){
-    return db.todos(TABLA);
+function todos(id){
+    return db.todos(TABLA, id);
 }
 
 function uno(id){

@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.0
+-- version 5.1.1
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1:3306
--- Tiempo de generación: 02-11-2023 a las 15:52:18
--- Versión del servidor: 8.0.31
--- Versión de PHP: 8.0.26
+-- Tiempo de generación: 03-11-2023 a las 14:44:42
+-- Versión del servidor: 5.7.36
+-- Versión de PHP: 7.4.26
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -29,13 +29,22 @@ SET time_zone = "+00:00";
 
 DROP TABLE IF EXISTS `biblioteca_usuario`;
 CREATE TABLE IF NOT EXISTS `biblioteca_usuario` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `id_receta_biblio` int NOT NULL,
-  `id_usuario` int NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id_receta_biblio` int(11) NOT NULL,
+  `id_foraneo` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `id_receta_biblio` (`id_receta_biblio`),
-  KEY `id_usuario` (`id_usuario`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  KEY `id_usuario` (`id_foraneo`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4;
+
+--
+-- Volcado de datos para la tabla `biblioteca_usuario`
+--
+
+INSERT INTO `biblioteca_usuario` (`id`, `id_receta_biblio`, `id_foraneo`) VALUES
+(2, 1, 10),
+(3, 2, 11),
+(4, 1, 11);
 
 -- --------------------------------------------------------
 
@@ -45,13 +54,13 @@ CREATE TABLE IF NOT EXISTS `biblioteca_usuario` (
 
 DROP TABLE IF EXISTS `ingredientes_biblioteca`;
 CREATE TABLE IF NOT EXISTS `ingredientes_biblioteca` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `id_receta_biblio` int NOT NULL,
-  `nombre` int NOT NULL,
-  `tipo` int NOT NULL,
-  `cantidad` int NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id_receta_biblio` int(11) NOT NULL,
+  `nombre` int(11) NOT NULL,
+  `tipo` int(11) NOT NULL,
+  `cantidad` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -61,21 +70,22 @@ CREATE TABLE IF NOT EXISTS `ingredientes_biblioteca` (
 
 DROP TABLE IF EXISTS `ingrediente_personal`;
 CREATE TABLE IF NOT EXISTS `ingrediente_personal` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `id_foraneo` int NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id_foraneo` int(11) NOT NULL,
   `nombre` varchar(40) NOT NULL,
   `tipo` varchar(40) NOT NULL,
   `cantidad` varchar(30) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `id_receta` (`id_foraneo`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4;
 
 --
 -- Volcado de datos para la tabla `ingrediente_personal`
 --
 
 INSERT INTO `ingrediente_personal` (`id`, `id_foraneo`, `nombre`, `tipo`, `cantidad`) VALUES
-(6, 10, 'jamon serrano', 'alimento', '1 libra');
+(6, 10, 'jamon serrano', 'alimento', '1 libra'),
+(7, 10, 'queso', 'alimento', '1 libra');
 
 -- --------------------------------------------------------
 
@@ -85,21 +95,22 @@ INSERT INTO `ingrediente_personal` (`id`, `id_foraneo`, `nombre`, `tipo`, `canti
 
 DROP TABLE IF EXISTS `receta_biblioteca`;
 CREATE TABLE IF NOT EXISTS `receta_biblioteca` (
-  `id` int NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `titulo` varchar(40) NOT NULL,
   `tipo_comida` varchar(40) NOT NULL,
   `duracion` time NOT NULL,
   `preparacion` varchar(3000) NOT NULL,
   `imagen` varchar(200) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4;
 
 --
 -- Volcado de datos para la tabla `receta_biblioteca`
 --
 
 INSERT INTO `receta_biblioteca` (`id`, `titulo`, `tipo_comida`, `duracion`, `preparacion`, `imagen`) VALUES
-(1, 'sadasdas', 'asdasdsa', '03:08:07', 'dassssssssssssssssasdasdasdsad', 'asdasdas');
+(1, 'sadasdas', 'asdasdsa', '03:08:07', 'dassssssssssssssssasdasdasdsad', 'asdasdas'),
+(2, 'test', 'desayuno', '01:02:19', 'asd asdfñlklkasdjflknasdjknfjkadsn nwoiedfoian', 'img.jpg');
 
 -- --------------------------------------------------------
 
@@ -109,16 +120,16 @@ INSERT INTO `receta_biblioteca` (`id`, `titulo`, `tipo_comida`, `duracion`, `pre
 
 DROP TABLE IF EXISTS `receta_personal`;
 CREATE TABLE IF NOT EXISTS `receta_personal` (
-  `id` int NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `titulo` varchar(40) NOT NULL,
   `tiempo_comida` varchar(40) NOT NULL,
   `duracion` time NOT NULL,
   `preparacion` varchar(3000) NOT NULL,
   `imagen` varchar(200) NOT NULL,
-  `id_foraneo` int NOT NULL,
+  `id_foraneo` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `id_usuario` (`id_foraneo`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4;
 
 --
 -- Volcado de datos para la tabla `receta_personal`
@@ -136,7 +147,7 @@ INSERT INTO `receta_personal` (`id`, `titulo`, `tiempo_comida`, `duracion`, `pre
 
 DROP TABLE IF EXISTS `usuario`;
 CREATE TABLE IF NOT EXISTS `usuario` (
-  `id` int NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `primer_nombre` varchar(40) NOT NULL,
   `segundo_nombre` varchar(40) NOT NULL,
   `primer_apellido` varchar(40) NOT NULL,
@@ -145,7 +156,7 @@ CREATE TABLE IF NOT EXISTS `usuario` (
   `contrasena` varchar(1000) NOT NULL,
   `correo` varchar(100) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4;
 
 --
 -- Volcado de datos para la tabla `usuario`
@@ -163,7 +174,7 @@ INSERT INTO `usuario` (`id`, `primer_nombre`, `segundo_nombre`, `primer_apellido
 -- Filtros para la tabla `biblioteca_usuario`
 --
 ALTER TABLE `biblioteca_usuario`
-  ADD CONSTRAINT `biblioteca_usuario_ibfk_1` FOREIGN KEY (`id_usuario`) REFERENCES `usuario` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `biblioteca_usuario_ibfk_1` FOREIGN KEY (`id_foraneo`) REFERENCES `usuario` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `biblioteca_usuario_ibfk_2` FOREIGN KEY (`id_receta_biblio`) REFERENCES `receta_biblioteca` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --

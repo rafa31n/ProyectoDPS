@@ -7,6 +7,7 @@ const router = express.Router();
 
 router.get('/', todos_biblioteca);
 router.get('/:id', uno_biblioteca);
+router.get('/mis_recetas/:id', todos_usuario);
 router.post('/', agregar_fav);
 router.put('/', eliminar_fav);
 
@@ -14,6 +15,15 @@ router.put('/', eliminar_fav);
 async function todos_biblioteca(req, res, next){
     try{
         const items = await controlador_receta.todos();
+        respuesta.success(req, res, items, 200);
+    }catch(err){
+        next(err);
+    } 
+};
+
+async function todos_usuario(req, res, next){
+    try{
+        const items = await controlador_fav.todos(req.params.id);
         respuesta.success(req, res, items, 200);
     }catch(err){
         next(err);
