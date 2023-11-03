@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
+import { StyleSheet, View, Text, TouchableOpacity, Image } from "react-native";
 import { useRoute } from '@react-navigation/native';
 import { useNavigation } from "@react-navigation/native";
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -28,8 +28,7 @@ const HomeScreen = () => {
 
     return (
         <View style={styles.container}>
-            <View style={styles.container_body}>
-                <View style={styles.container_header}>
+            <View style={styles.container_header}>
                     {datosUsuario ? (
                         <Text style={styles.headerText}>Bienvenido {datosUsuario.username}</Text>
                     ) : (
@@ -38,38 +37,38 @@ const HomeScreen = () => {
 
                     <TouchableOpacity onPress={() => navigation.navigate('Perfil', { userId })}>
                         <Icon style={styles.icon}
-                            name='account' color='#000' size={50} />
+                            name='account' color='white' size={50} />
                     </TouchableOpacity>
-                </View>
-                <Text style={styles.articleText}>Lista de compra</Text>
-                <View style={styles.articleContainer}>
+            </View>
 
-                    <TouchableOpacity style={styles.buttons} onPress={() => navigation.navigate('AgregarIngredientes')}>
-                        <Text>Añadir una lista</Text>
-                    </TouchableOpacity>
-                </View>
+            <View style={styles.container_body}>
+                <TouchableOpacity onPress={() => navigation.navigate('AgregarIngredientes')}>
+                    <View style={styles.articleContainer}>
+                        <Image style={styles.image} source={{uri: 'https://cdn-icons-png.flaticon.com/512/4543/4543179.png'}}/>
+                        <Text style={styles.articelTitle}>Lista de compra</Text>
+                    </View>
+                </TouchableOpacity>
 
-                <Text style={styles.articleText}>Agregar recetas</Text>
-                <View style={styles.articleContainer}>
-                    <TouchableOpacity style={styles.buttons} onPress={() => navigation.navigate('Agregar recetas')}>
-                        <Text>Añadir una receta</Text>
-                    </TouchableOpacity>
-                </View>
+                <TouchableOpacity onPress={() => navigation.navigate('Agregar recetas')}>
+                    <View style={styles.articleContainer}>
+                        <Image style={styles.image} source={{uri: 'https://cdn-icons-png.flaticon.com/512/1091/1091916.png'}}/>
+                        <Text style={styles.articelTitle}>Agregar receta</Text>
+                    </View>
+                </TouchableOpacity>
 
-                <Text style={styles.articleText}>Biblioteca recetas</Text>
-                <View style={styles.articleContainer}>
-                    <TouchableOpacity style={styles.buttons} onPress={() => navigation.navigate('Biblioteca recetas')}>
-                        <Text>Ver Biblioteca</Text>
-                    </TouchableOpacity>
-                </View>
+                <TouchableOpacity onPress={() => navigation.navigate('Biblioteca recetas', { userId })}>
+                    <View style={styles.articleContainer}>
+                        <Image style={styles.image} source={{uri: 'https://cdn-icons-png.flaticon.com/512/196/196039.png'}}/>
+                        <Text style={styles.articelTitle}>Biblioteca de recetas</Text>
+                    </View>
+                </TouchableOpacity>
 
-                <Text style={styles.articleText}>Mis recetas</Text>
-                <View style={styles.articleContainer}>
-
-                    <TouchableOpacity style={styles.buttons} onPress={() => navigation.navigate('Mis recetas')}>
-                        <Text>Añadir una receta</Text>
-                    </TouchableOpacity>
-                </View>
+                <TouchableOpacity onPress={() => navigation.navigate('Mis recetas', { userId })}>
+                    <View style={styles.articleContainer}>
+                        <Image style={styles.image} source={{uri: 'https://cdn-icons-png.flaticon.com/512/3003/3003655.png'}}/>
+                        <Text style={styles.articelTitle}>Mis recetas</Text>
+                    </View>
+                </TouchableOpacity>
 
             </View>
         </View>
@@ -81,17 +80,23 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'flex-start',
         alignItems: 'center',
-        backgroundColor: '#fff',
+        backgroundColor: '#CFFFFD',
     },
     container_header: {
         flexDirection: 'row',
-        justifyContent: 'space-between'
+        justifyContent: 'space-between',
+        backgroundColor: '#006294',
+        borderBottomLeftRadius: 15,
+        borderBottomRightRadius: 15,
+        width: '100%',
+        padding: 10
     },
     headerText: {
         fontSize: 24,
         fontWeight: 'bold',
         marginBottom: 10,
         marginTop: 10,
+        color: 'white'
     },
     title: {
         fontSize: 24,
@@ -128,12 +133,38 @@ const styles = StyleSheet.create({
         marginTop: 10
     },
     articleContainer: {
+        display: 'flex',
+        flexDirection: 'row',
         width: 350,
-        borderRadius: 10,
-        backgroundColor: "#DFDFDF",
-        justifyContent: 'center',
-        alignItems: 'center'
+        borderRadius: 15,
+        backgroundColor: "#F9F9F9",
+        alignItems: 'left',
+        padding: 10,
+        flexWrap: 'wrap',
+        marginTop: 25,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.3,
+        shadowRadius: 4,
+        elevation: 5,
 
-    }
+    },
+    articelTitle: {
+        fontSize: 24,
+        verticalAlign: 'middle',
+        paddingTop: 17,
+        fontWeight: 'bold',
+        color: '#DD4D4D',
+        marginLeft: 10
+    },
+    image:{
+        width: 75,
+        height: 75,
+    },
+    container_title:{
+        backgroundColor: '#006294',
+        borderBottomLeftRadius: 15,
+        borderBottomRightRadius: 15
+      }
 });
 export default HomeScreen;
