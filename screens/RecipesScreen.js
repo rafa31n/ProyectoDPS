@@ -38,7 +38,7 @@ const RecipesScreen = () => {
   return (
     <View>
       <View>
-        <View>
+        <View style={styles.container_title}>
           <Text style={styles.headerText}>Información de la receta</Text>
         </View>
 
@@ -97,7 +97,8 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 10,
     marginTop: 30,
-    textAlign: 'center'
+    textAlign: 'center',
+    color: 'white'
   },
   inputContainer: {
     flexDirection: "row",
@@ -160,6 +161,12 @@ const styles = StyleSheet.create({
   containerInputs: {
     justifyContent: 'center', // Centrado vertical
     alignItems: 'center',
+  },
+  container_title:{
+    backgroundColor: '#006294',
+    borderBottomLeftRadius: 15,
+    borderBottomRightRadius: 15,
+    paddingBottom: 20
   }
 });
 export default RecipesScreen;
