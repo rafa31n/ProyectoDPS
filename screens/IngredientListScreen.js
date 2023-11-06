@@ -1,49 +1,98 @@
+import React, { useState } from "react";
 import {
   StyleSheet,
   Text,
   TextInput,
-  TouchableOpacity, Button,
+  TouchableOpacity,
+  Button,
   FlatList,
   View,
 } from "react-native";
+import Modal from "react-native-modal";
+import IconFA from 'react-native-vector-icons/Ionicons';
+import Icon from 'react-native-vector-icons/Fontisto';
 import { useNavigation } from "@react-navigation/native";
-import { useState } from "react";
+import { ScrollView } from "react-native-gesture-handler";
+
 const IngredientList = () => {
   const [ingredientes, setIngredientes] = useState([]);
-  const [nuevoIngrediente, setNuevoIngrediente] = useState('');
+  const [nuevoIngrediente, setNuevoIngrediente] = useState("");
+  const [eliminarIndex, setEliminarIndex] = useState(-1); // Índice del elemento a eliminar
+  const [editarIndex, setEditarIndex] = useState(-1); // Índice del elemento a editar
+  const [editModalVisible, setEditModalVisible] = useState(false);
+  const navigation = useNavigation();
+
+  const [editIngrediente, setEditIngrediente] = useState(""); // Valor del elemento en edición
 
   const handleNuevoIngredienteChange = (text) => {
     setNuevoIngrediente(text);
   };
 
   const handleAgregarIngrediente = () => {
-    if (nuevoIngrediente.trim() === '') {
-      alert("Ingrese un dato")
+    if (nuevoIngrediente.trim() === "") {
+      alert("Ingrese un dato");
     } else {
       setIngredientes([...ingredientes, nuevoIngrediente]);
-      setNuevoIngrediente('');
+      setNuevoIngrediente("");
     }
-
-
   };
 
-  const handleEliminarIngrediente = (index) => {
-    const nuevosIngredientes = [...ingredientes];
-    nuevosIngredientes.splice(index, 1);
-    setIngredientes(nuevosIngredientes);
+  const confirmarEliminacion = (index) => {
+    setEliminarIndex(index);
+    setEditModalVisible(true);
+  };
+
+  const handleEliminarIngrediente = () => {
+    if (eliminarIndex !== -1) {
+      const nuevosIngredientes = [...ingredientes];
+      nuevosIngredientes.splice(eliminarIndex, 1);
+      setIngredientes(nuevosIngredientes);
+      setEliminarIndex(-1); // Restablecer el índice de eliminación
+    }
+    setEditModalVisible(false);
+  };
+
+  const confirmarEdicion = (index) => {
+    setEditarIndex(index);
+    setEditIngrediente(ingredientes[index]);
+    setEditModalVisible(true);
+  };
+
+  const handleGuardarEdicion = () => {
+    if (editarIndex !== -1 && editIngrediente.trim() !== "") {
+      const nuevosIngredientes = [...ingredientes];
+      nuevosIngredientes[editarIndex] = editIngrediente;
+      setIngredientes(nuevosIngredientes);
+      setEditIngrediente("");
+      setEditarIndex(-1); // Restablecer el índice de edición
+    }
+    setEditModalVisible(false);
   };
 
   const handleAgregarLista = () => {
     if (ingredientes.length > 0) {
-      alert("lista de ingredientes agregada")
+      alert("Lista de ingredientes agregada");
     } else {
-      alert("lista esta vacia, agregue algun ingrediente ")
+      alert("La lista está vacía, agregue algún ingrediente");
     }
-  }
+  };
 
   return (
+    
     <View style={styles.container}>
-      <Text style={styles.headerText}>Lista de compras</Text>
+      <View style={styles.headerContainer}>
+          <View style={styles.leftElement}>
+            <TouchableOpacity style={styles.buttonLogin} onPress={() => navigation.navigate('Home')}>
+              <IconFA style={styles.icon}
+                name='arrow-back-circle' color='#fff' size={25} />
+            </TouchableOpacity>
+
+          </View>
+          <View style={styles.centerElement}>
+            <Text style={styles.header}>Lista de Compras </Text>
+          </View>
+        </View>
+    
       <Text style={styles.label}>Item que desea comprar:</Text>
       <TextInput
         style={styles.input}
@@ -52,38 +101,110 @@ const IngredientList = () => {
         placeholder="Nuevo Item"
       />
       <Button title="Agregar" onPress={handleAgregarIngrediente} />
-
+      
       <Text style={styles.label}>Lista de Compras:</Text>
-      <FlatList
-        data={ingredientes}
-        renderItem={({ item, index }) => (
-          <View style={styles.ingredienteItem}>
-            <Text>{item}</Text>
-            <Button
-              title="Eliminar"
-              onPress={() => handleEliminarIngrediente(index)}
-            />
-          </View>
-        )}
-        keyExtractor={(item, index) => index.toString()}
-      />
+      
+      <View  >
+        <FlatList 
+          data={ingredientes}
+          renderItem={({ item, index }) => (
+            <View style={styles.ingredienteItem}>
+              <Text style={styles.itemText} >{item}</Text>
+              <TouchableOpacity
+                style={styles.eliminarButton}
+                onPress={() => confirmarEliminacion(index)}
+              >
+                <Text style={styles.eliminarButtonText}>Eliminar</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.editarButton}
+                onPress={() => confirmarEdicion(index)}
+              >
+                <Text style={styles.eliminarButtonText}>Editar</Text>
+              </TouchableOpacity>
+          
+            </View>
+          )}
+          keyExtractor={(item, index) => index.toString()}
+        />
+        </View>
+     
       <TouchableOpacity style={styles.buttonRegistrarse}>
-        <Text style={styles.textBtnRegistrarse} onPress={handleAgregarLista}>Agregar los Items</Text>
+        <Text style={styles.textBtnRegistrarse} onPress={handleAgregarLista}>
+          Agregar los Items
+        </Text>
       </TouchableOpacity>
+
+      <Modal isVisible={editModalVisible}>
+        <View style={styles.modalContainer}>
+          <Text style={styles.modalText}>
+            {editarIndex !== -1
+              ? "Editar Item"
+              : "¿Está seguro de que desea eliminar este Item?"}
+          </Text>
+          {editarIndex !== -1 ? (
+            <TextInput
+              style={styles.editInput}
+              value={editIngrediente}
+              onChangeText={(nuevoTexto) => setEditIngrediente(nuevoTexto)}
+            />
+          ) : null}
+          {editarIndex !== -1 ? (
+            <TouchableOpacity
+              style={styles.butonModalEliminar}
+              onPress={handleGuardarEdicion}
+            >
+              <Text style={styles.eliminarButtonText}>Guardar</Text>
+            </TouchableOpacity>
+          ) : (
+            <TouchableOpacity
+              style={styles.butonModalEliminar}
+              onPress={handleEliminarIngrediente}
+            >
+              <Text style={styles.eliminarButtonText}>Eliminar</Text>
+            </TouchableOpacity>
+          )}
+          <TouchableOpacity
+            style={styles.cancelarButton}
+            onPress={() => {
+              setEditModalVisible(false);
+              setEditIngrediente("");
+              setEditarIndex(-1);
+            }}
+          >
+            <Text style={styles.eliminarButtonText}>Cancelar</Text>
+          </TouchableOpacity>
+        </View>
+      </Modal>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    padding: 16,
+    padding: 0,
   },
-  headerText: {
-    fontSize: 24,
+  headerContainer: {
+    backgroundColor: '#006294',
+    flexDirection: 'row',
+  },
+  leftElement: {
+    marginLeft: 16,
+    marginRight: 25,
+    marginTop: 8,
+  },itemText:{
+    textAlign:'center'
+  },
+  centerElement: {
+    marginBottom: 20,
+  },
+  header: {
     fontWeight: 'bold',
-    marginBottom: 10,
-    marginTop: 10,
+    fontSize: 24,
+    paddingTop: 16,
+    color: '#fff'
   },
+ 
   label: {
     fontSize: 16,
     marginBottom: 10,
@@ -97,10 +218,15 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   ingredienteItem: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 8,
+    backgroundColor: '#fff',
+    borderRadius: 8,
+    margin: 16,
+    padding: 16,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+    elevation: 5,
   },
   buttonRegistrarse: {
     backgroundColor: '#4CAF50',
@@ -108,12 +234,63 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 5,
+    
+  },modalContainer: {
+    backgroundColor: 'white',
+    padding: 20,
+    borderRadius: 10,
+    alignItems: 'center',
+  },
+  modalText: {
+    fontSize: 18,
+    marginBottom: 10,
   },
   textBtnRegistrarse: {
     textAlign: 'center',
     marginTop: 0,
     color: 'white',
-  },
+  },butonModalEliminar:{
+    backgroundColor: 'red',
+    padding: 10,
+    borderRadius: 5,
+    marginTop: 10,
+    alignSelf: 'center',
+  },eliminarButtonText: {
+    color: 'white',
+    fontSize: 18,
+    textAlign: 'center',
+  },cancelarButton: {
+  backgroundColor: 'gray',
+  padding: 10,
+  borderRadius: 5,
+  marginTop: 10,
+  alignSelf: 'center', 
+},cancelarButtonText: {
+  color: 'white',
+  fontSize: 18,
+  textAlign: 'center',
+},  eliminarButton: {
+  backgroundColor: 'red',
+  padding: 10,
+  margin: 5,
+  borderRadius: 5,
+  flex: 0, 
+},
+
+editarButton: {
+  backgroundColor: '#4CAF50',
+  padding: 10,
+  margin: 5,
+  borderRadius: 5,
+  flex: 0,
+},
+
+eliminarButtonText: {
+  color: 'white',
+  textAlign: 'center', // Esto centra el texto en el botón
+},
+
+
 });
 
 export default IngredientList
