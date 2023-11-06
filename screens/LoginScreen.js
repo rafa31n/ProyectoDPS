@@ -11,29 +11,41 @@ const LoginScreen = () => {
     const [usuario, setUsuario] = useState('');
     const [contrasena, setContrasena] = useState('');
 
-    const navigate = (param1, param2) => {
-        navigation.navigate('Home', { param1, param2 });
-    };
-
     const iniciarSesion = async () => {
         if (usuario.length > 0 && contrasena.length > 0) {
-            try {
-                const data = {
-                    username: usuario,
-                    contrasena: contrasena
-                }
-                const loginUser = await loginUsuario(data);
-                if (loginUser.data.status == 200) {                    
-                    const userId = loginUser.data.body[0].id;
-                    const datosUsuario = { username: usuario, userId: userId };
-                    AsyncStorage.setItem('datosUsuario', JSON.stringify(datosUsuario));
-                    navigate(userId, usuario);                    
-                } else {
-                    alert('Credenciales incorrectas.');
-                }
-            } catch (error) {
-                console.error('Error al realizar la solicitud:', error);
+            const postData = {
+                username: usuario,
+                contrasena: contrasena
             }
+
+            fetch('http://10.0.2.2:4000/api/usuario/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(postData),
+            })
+                .then(response => {
+                    if (response.ok) {
+                        return response.json();
+                    } else {
+                        throw new Error('Error en la solicitud POST');
+                    }
+                })
+                .then(data => {
+                    console.log(data)
+                    if (data.status == 200) {
+                        const datosUsuario = { username: usuario, userId: data.body[0].id };
+                        AsyncStorage.setItem('datosUsuario', JSON.stringify(datosUsuario));
+                        navigation.navigate('Home');
+                    } else {
+                        alert('Credenciales incorrectas.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error al realizar la solicitud:', error);
+                    alert('Error al realizar la solicitud.')
+                });
         }
     };
 

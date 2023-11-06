@@ -1,26 +1,18 @@
-import {
-  StyleSheet,
-  Text,
-  View,
-  Image,
-  TouchableOpacity,
-  ScrollView,
-  Modal,
-} from "react-native";
 import React, { useState, useEffect } from "react";
 import IconFA from "react-native-vector-icons/Ionicons";
 import Icon from "react-native-vector-icons/Fontisto";
 import { useNavigation } from "@react-navigation/native";
+import { StyleSheet, Text, View, Image, TouchableOpacity, ScrollView, Modal } from "react-native";
 
 const BibliotecaScreen = () => {
   const navigation = useNavigation();
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [modalVisibleEliminar, setModalVisibleEliminar] = useState(false);
+  // const [modalVisibleEliminar, setModalVisibleEliminar] = useState(false);
   const [modalVisibleFavorito, setModalVisibleFavorito] = useState(false);
 
   useEffect(() => {
-    fetch("http://10.0.2.2:4000/api/recetas")
+    fetch("http://10.0.2.2:4000/api/recetas_biblioteca")
       .then((response) => response.json())
       .then((data) => {
         setData(data);
@@ -32,22 +24,19 @@ const BibliotecaScreen = () => {
       });
   }, []);
 
-  function eliminar(id){
+  /*function eliminar(id) {
     alert('Eliminado');
     setModalVisibleEliminar(!modalVisibleEliminar);
-  }
+  }*/
 
-  function agregar(){
+  function agregar() {
     alert('Agregado')
     setModalVisibleFavorito(!modalVisibleFavorito);
-    
   }
 
   return (
     <View>
-
-      
-      <Modal
+      {/*<Modal
         transparent={true}
         animationType="slide"
         visible={modalVisibleEliminar}
@@ -70,7 +59,7 @@ const BibliotecaScreen = () => {
             </View>
           </View>
         </View>
-      </Modal>
+              </Modal>*/}
 
       <Modal
         transparent={true}
@@ -137,7 +126,7 @@ const BibliotecaScreen = () => {
                     </View>
                   </View>
                   <View style={styles.contenido_icons}>
-                    <TouchableOpacity onPress={() => {setModalVisibleFavorito(!modalVisibleFavorito)}}>
+                    <TouchableOpacity onPress={() => { setModalVisibleFavorito(!modalVisibleFavorito) }}>
                       <Icon
                         style={styles.icon}
                         name="favorite"
@@ -145,14 +134,14 @@ const BibliotecaScreen = () => {
                         size={25}
                       />
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.icon} onPress={() => {setModalVisibleEliminar(!modalVisibleEliminar)}}>
+                    {/*<TouchableOpacity style={styles.icon} onPress={() => { setModalVisibleEliminar(!modalVisibleEliminar) }}>
                       <Icon
                         style={styles.icon}
                         name="trash"
                         color="#c13145"
                         size={25}
                       />
-                    </TouchableOpacity>
+                  </TouchableOpacity>*/}
                   </View>
                 </View>
               ))}
@@ -222,11 +211,11 @@ const styles = StyleSheet.create({
     marginTop: 10,
     alignSelf: "flex-end",
   },
-  modal:{
+  modal: {
     backgroundColor: '#000000aa',
     flex: 1
   },
-  vista_modal:{
+  vista_modal: {
     backgroundColor: '#fff',
     marginVertical: '83%',
     marginHorizontal: '10%',
@@ -234,22 +223,22 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     flex: 1
   },
-  button_can:{
+  button_can: {
     height: 30,
     width: 70,
     marginVertical: 10
   },
-  button_elim:{
+  button_elim: {
     height: 30,
     width: 70,
     marginVertical: 10,
     marginRight: 10
   },
-  button_text:{
+  button_text: {
     color: '#005FAC',
     fontWeight: 'bold'
   },
-  buttonLogin:{
+  buttonLogin: {
     marginTop: 10
   }
 });

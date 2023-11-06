@@ -1,18 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, View, Text, TouchableOpacity, Image } from "react-native";
+import { StyleSheet, View, Text, TouchableOpacity, Image, ScrollView } from "react-native";
 import { useRoute } from '@react-navigation/native';
 import { useNavigation } from "@react-navigation/native";
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import IconFA from "react-native-vector-icons/Ionicons";
 
 const HomeScreen = () => {
-    const navigation = useNavigation();
     const route = useRoute();
-    const userId = route.params?.param1;
-    console.log(userId)
-    const username = route.params?.param2;
-
+    const navigation = useNavigation();
     const [datosUsuario, setDatosUsuario] = useState(null);
+
     useEffect(() => {
         AsyncStorage.getItem('datosUsuario')
             .then((data) => {
@@ -27,69 +25,87 @@ const HomeScreen = () => {
     }, []);
 
     return (
-        <View style={styles.container}>
-            <View style={styles.container_header}>
-                    {datosUsuario ? (
-                        <Text style={styles.headerText}>Bienvenido {datosUsuario.username}</Text>
-                    ) : (
-                        <Text style={styles.headerText}>Bienvenido</Text>
-                    )}
+        <View>
+            <ScrollView>
+                <View style={styles.headerContainer}>
 
-                    <TouchableOpacity onPress={() => navigation.navigate('Perfil', { userId })}>
-                        <Icon style={styles.icon}
-                            name='account' color='white' size={50} />
+                    <View style={styles.centerElement}>
+                        {datosUsuario ? (
+                            <Text style={styles.header}>Bienvenido {datosUsuario.username}</Text>
+                        ) : (
+                            <Text style={styles.header}>Bienvenido!!</Text>
+                        )}
+                    </View>
+                    <View style={styles.rightElement}>
+                        <TouchableOpacity
+                            style={styles.buttonLogin}
+                            onPress={() => navigation.navigate('Perfil')}>
+                            <Icon style={styles.icon}
+                                name='account' color='white' size={50} />
+                        </TouchableOpacity>
+                    </View>
+                </View>
+
+                <View style={styles.container_body}>
+                    
+                    <TouchableOpacity onPress={() => navigation.navigate('AgregarIngredientes')}>
+                        <View style={styles.articleContainer}>
+                            <Image style={styles.image} source={{ uri: 'https://cdn-icons-png.flaticon.com/512/4543/4543179.png' }} />
+                            <Text style={styles.articelTitle}>Lista de compra</Text>
+                        </View>
                     </TouchableOpacity>
-            </View>
 
-            <View style={styles.container_body}>
-                <TouchableOpacity onPress={() => navigation.navigate('AgregarIngredientes')}>
-                    <View style={styles.articleContainer}>
-                        <Image style={styles.image} source={{uri: 'https://cdn-icons-png.flaticon.com/512/4543/4543179.png'}}/>
-                        <Text style={styles.articelTitle}>Lista de compra</Text>
-                    </View>
-                </TouchableOpacity>
+                    <TouchableOpacity onPress={() => navigation.navigate('Agregar recetas')}>
+                        <View style={styles.articleContainer}>
+                            <Image style={styles.image} source={{ uri: 'https://cdn-icons-png.flaticon.com/512/1091/1091916.png' }} />
+                            <Text style={styles.articelTitle}>Agregar receta</Text>
+                        </View>
+                    </TouchableOpacity>
 
-                <TouchableOpacity onPress={() => navigation.navigate('Agregar recetas')}>
-                    <View style={styles.articleContainer}>
-                        <Image style={styles.image} source={{uri: 'https://cdn-icons-png.flaticon.com/512/1091/1091916.png'}}/>
-                        <Text style={styles.articelTitle}>Agregar receta</Text>
-                    </View>
-                </TouchableOpacity>
+                    <TouchableOpacity onPress={() => navigation.navigate('Biblioteca recetas')}>
+                        <View style={styles.articleContainer}>
+                            <Image style={styles.image} source={{ uri: 'https://cdn-icons-png.flaticon.com/512/196/196039.png' }} />
+                            <Text style={styles.articelTitle}>Biblioteca de recetas</Text>
+                        </View>
+                    </TouchableOpacity>
 
-                <TouchableOpacity onPress={() => navigation.navigate('Biblioteca recetas', { userId })}>
-                    <View style={styles.articleContainer}>
-                        <Image style={styles.image} source={{uri: 'https://cdn-icons-png.flaticon.com/512/196/196039.png'}}/>
-                        <Text style={styles.articelTitle}>Biblioteca de recetas</Text>
-                    </View>
-                </TouchableOpacity>
+                    <TouchableOpacity onPress={() => navigation.navigate('Mis recetas')}>
+                        <View style={styles.articleContainer}>
+                            <Image style={styles.image} source={{ uri: 'https://cdn-icons-png.flaticon.com/512/3003/3003655.png' }} />
+                            <Text style={styles.articelTitle}>Mis recetas</Text>
+                        </View>
+                    </TouchableOpacity>
 
-                <TouchableOpacity onPress={() => navigation.navigate('Mis recetas', { userId })}>
-                    <View style={styles.articleContainer}>
-                        <Image style={styles.image} source={{uri: 'https://cdn-icons-png.flaticon.com/512/3003/3003655.png'}}/>
-                        <Text style={styles.articelTitle}>Mis recetas</Text>
-                    </View>
-                </TouchableOpacity>
-
-            </View>
+                </View>
+            </ScrollView>
         </View>
     );
 };
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: 'flex-start',
-        alignItems: 'center',
-        backgroundColor: '#CFFFFD',
+    headerContainer: {
+        backgroundColor: "#006294",
+        flexDirection: "row",
     },
-    container_header: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        backgroundColor: '#006294',
-        borderBottomLeftRadius: 15,
-        borderBottomRightRadius: 15,
-        width: '100%',
-        padding: 10
+    rightElement: {
+        marginLeft: 16,
+        marginRight: 25,
+        marginTop: 8,
+    },
+    centerElement: {
+        marginBottom: 20,
+        width: '80%',
+        height: '100%',
+    },
+    buttonLogin: {
+        marginRight: 20,
+    },
+    header: {
+        fontWeight: "bold",
+        fontSize: 24,
+        paddingTop: 16,
+        color: "#fff",
+        textAlign: 'center'
     },
     headerText: {
         fontSize: 24,
@@ -112,7 +128,9 @@ const styles = StyleSheet.create({
         fontSize: 18,
     },
     container_body: {
-        padding: 10
+        padding: 10,
+        backgroundColor: "#e5f2fa",
+        height: "100%",
     },
     buttons: {
         marginTop: 15,
@@ -135,36 +153,36 @@ const styles = StyleSheet.create({
     articleContainer: {
         display: 'flex',
         flexDirection: 'row',
-        width: 350,
+        width: '100%',
         borderRadius: 15,
         backgroundColor: "#F9F9F9",
         alignItems: 'left',
         padding: 10,
         flexWrap: 'wrap',
-        marginTop: 25,
+        marginTop: 15,
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.3,
         shadowRadius: 4,
         elevation: 5,
-
     },
     articelTitle: {
-        fontSize: 24,
-        verticalAlign: 'middle',
-        paddingTop: 17,
+        fontSize: 18,                
         fontWeight: 'bold',
         color: '#DD4D4D',
-        marginLeft: 10
+        marginLeft: 15,
+        textTransform: 'uppercase',
+        padding: 10,
+        marginTop: 15,
     },
-    image:{
+    image: {
         width: 75,
         height: 75,
     },
-    container_title:{
+    container_title: {
         backgroundColor: '#006294',
         borderBottomLeftRadius: 15,
         borderBottomRightRadius: 15
-      }
+    }
 });
 export default HomeScreen;

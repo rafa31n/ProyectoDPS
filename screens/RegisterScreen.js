@@ -1,11 +1,5 @@
 import React, { useState } from "react";
-import {
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { StyleSheet, Text, TextInput, TouchableOpacity, View, } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { Icon } from "@rneui/base";
 import IconAD from 'react-native-vector-icons/AntDesign';
@@ -20,35 +14,46 @@ const RegisterScreen = () => {
   const [confirmarContrasena, setConfirmarContrasena] = useState("");
 
   const navigation = useNavigation();
-
-  const navigate = (parametro) => {
-    navigation.navigate('Home', { parametro });
-  };
-
   const registrarse = async () => {
     if (contrasena == confirmarContrasena && contrasena.length > 0) {
       const nombre = nombres.split(' ');
       const apellido = apellidos.split(' ');
 
-      try {
-        const data = {
-          id_usuario: 0,
-          primer_nombre: nombre[0],
-          segundo_nombre: nombre[1],
-          primer_apellido: apellido[0],
-          segundo_apellido: apellido[1],
-          username: usuario,
-          contrasena: contrasena,
-          correo: correo
-        }
-        const crearUser = await crearUsuario(data);
-        if (crearUser.data.status == 200) {
-          //alert('Usuario creado con exito')
-          navigate(usuario);
-        }
-      } catch (error) {
-        console.error('Error al realizar la solicitud:', error);
+      const postData = {
+        id: 0,
+        primer_nombre: nombre[0],
+        segundo_nombre: nombre[1],
+        primer_apellido: apellido[0],
+        segundo_apellido: apellido[1],
+        username: usuario,
+        contrasena: contrasena,
+        correo: correo
       }
+
+      fetch('http://10.0.2.2:4000/api/usuario/registro', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(postData),
+      })
+        .then(response => {
+          if (response.ok) {
+            return response.json();
+          } else {
+            throw new Error('Error en la solicitud POST');
+          }
+        })
+        .then(data => {
+          if (data.status === 200) {
+            alert("El usuario ha sido creado con éxito.")
+            navigation.navigate('Login');
+          }
+        })
+        .catch(error => {
+          console.error('Error al realizar la solicitud:', error);
+          alert('Error al realizar la solicitud.')
+        });
     } else {
       alert("Las contraseñas no coinciden. Revisa los datos.")
     }
