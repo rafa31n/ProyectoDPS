@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { TextInput, StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { verInfoUsuario, actualizarInfoUsuario } from '../src/api/api.js';
+//import { verInfoUsuario, actualizarInfoUsuario } from '../src/api/api.js';
 import { useRoute } from '@react-navigation/native';
 
 const ProfileScreen = () => {
@@ -27,13 +27,13 @@ const ProfileScreen = () => {
           username: usuario,
           correo: correo
         }
-        const loginUser = await actualizarInfoUsuario(data);
+        /*const loginUser = await actualizarInfoUsuario(data);
         if (loginUser.data.status == 200) {
           alert('Informacion actualizada correctamente')
           cargarInfoUsuario();
         } else {
           alert('No se pudo actualizar la informacion de usuario.');
-        }
+        }*/
       } catch (error) {
         console.error('Error al realizar la solicitud:', error);
       }

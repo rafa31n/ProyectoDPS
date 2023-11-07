@@ -25,7 +25,7 @@ const HomeScreen = () => {
     }, []);
 
     return (
-        <View>
+        <View style={styles.componentContainer}>
             <ScrollView>
                 <View style={styles.headerContainer}>
 
@@ -47,7 +47,7 @@ const HomeScreen = () => {
                 </View>
 
                 <View style={styles.container_body}>
-                    
+
                     <TouchableOpacity onPress={() => navigation.navigate('AgregarIngredientes')}>
                         <View style={styles.articleContainer}>
                             <Image style={styles.image} source={{ uri: 'https://cdn-icons-png.flaticon.com/512/4543/4543179.png' }} />
@@ -83,6 +83,10 @@ const HomeScreen = () => {
 };
 
 const styles = StyleSheet.create({
+    componentContainer: {
+        flex: 1,
+        backgroundColor: '#e5f2fa'
+    },
     headerContainer: {
         backgroundColor: "#006294",
         flexDirection: "row",
@@ -129,8 +133,6 @@ const styles = StyleSheet.create({
     },
     container_body: {
         padding: 10,
-        backgroundColor: "#e5f2fa",
-        height: "100%",
     },
     buttons: {
         marginTop: 15,
@@ -167,7 +169,7 @@ const styles = StyleSheet.create({
         elevation: 5,
     },
     articelTitle: {
-        fontSize: 18,                
+        fontSize: 18,
         fontWeight: 'bold',
         color: '#DD4D4D',
         marginLeft: 15,

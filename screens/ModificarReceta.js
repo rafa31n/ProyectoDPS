@@ -1,7 +1,7 @@
 import { BackHandler, StyleSheet, Text, TextInput, TouchableOpacity, View, } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { useState } from "react";
-import { agregarReceta } from "../src/api/api";
+//import { agregarReceta } from "../src/api/api";
 
 
 const ModificarReceta = () => {
@@ -23,12 +23,12 @@ const ModificarReceta = () => {
           imagen: "imagen.jpg",
           id_usuario: 0,
         }
-        const loginUser = await agregarReceta(data);
+        /*const loginUser = await agregarReceta(data);
         if (loginUser.data.status == 200) {
           alert('Receta modificada')
         } else {
           alert('Credenciales incorrectas.');
-        }
+        }*/
       } catch (error) {
         console.error('Error al realizar la solicitud:', error);
       }

@@ -1,9 +1,8 @@
 import React, { useState } from "react";
-import { StyleSheet, Text, TextInput, TouchableOpacity, View, } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { Icon } from "@rneui/base";
 import IconAD from 'react-native-vector-icons/AntDesign';
-import { crearUsuario } from '../src/api/api.js';
+import { StyleSheet, Text, TextInput, TouchableOpacity, View, } from "react-native";
 
 const RegisterScreen = () => {
   const [nombres, setNombres] = useState("");

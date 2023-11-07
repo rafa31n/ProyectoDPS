@@ -1,7 +1,8 @@
-import { StyleSheet, Text, TextInput, TouchableOpacity, View, } from "react-native";
-import { useNavigation } from "@react-navigation/native";
 import { useState } from "react";
-import { agregarReceta } from "../src/api/api";
+import { useNavigation } from "@react-navigation/native";
+import IconFA from "react-native-vector-icons/Ionicons";
+import { StyleSheet, Text, TextInput, TouchableOpacity, View, ScrollView } from "react-native";
+//import { agregarReceta } from "../src/api/api";
 
 const RecipesScreen = () => {
   const navigation = useNavigation();
@@ -22,12 +23,12 @@ const RecipesScreen = () => {
           imagen: "imagen.jpg",
           id_usuario: 0,
         }
-        const loginUser = await agregarReceta(data);
+        /*const loginUser = await agregarReceta(data);
         if (loginUser.data.status == 200) {
           alert('Receta agregada')
         } else {
           alert('Credenciales incorrectas.');
-        }
+        }*/
       } catch (error) {
         console.error('Error al realizar la solicitud:', error);
       }
@@ -36,10 +37,25 @@ const RecipesScreen = () => {
 
 
   return (
-    <View>
-      <View>
-        <View style={styles.container_title}>
-          <Text style={styles.headerText}>Información de la receta</Text>
+    <View style={styles.componentContainer}>
+      <ScrollView>
+        <View style={styles.headerContainer}>
+          <View style={styles.leftElement}>
+            <TouchableOpacity
+              style={styles.buttonLogin}
+              onPress={() => navigation.navigate("Home")}
+            >
+              <IconFA
+                style={styles.icon}
+                name="arrow-back-circle"
+                color="#fff"
+                size={25}
+              />
+            </TouchableOpacity>
+          </View>
+          <View style={styles.centerElement}>
+            <Text style={styles.header}>Mis recetas</Text>
+          </View>
         </View>
 
         <View style={styles.containerInputs}>
@@ -72,23 +88,49 @@ const RecipesScreen = () => {
             placeholderTextColor="#000"
           />
 
-          <TouchableOpacity style={styles.buttonRegistrarse} onPress={agregarRecetas}>
+          <TouchableOpacity style={styles.btnAgregar} onPress={agregarRecetas}>
             <Text style={styles.textBtnRegistrarse} >Agregar Receta</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.buttonRegistrarse} onPress={() => navigation.navigate('AgregarIngredientes')}>
-            <Text style={styles.textBtnRegistrarse} >Agregar lista de compras</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.buttonRegistrarse} onPress={() => navigation.navigate('AgregarIngredientes')}>
-            <Text style={styles.textBtnRegistrarse} >Agregar ingredientes</Text>
-          </TouchableOpacity>
+          </TouchableOpacity>          
         </View>
 
 
-      </View>
+      </ScrollView>
     </View>
   );
 }
 const styles = StyleSheet.create({
+  componentContainer: {
+    flex: 1,
+    backgroundColor: '#e5f2fa'
+  },
+  buttonLogin: {
+    marginTop: 10
+  },
+  headerContainer: {
+    backgroundColor: "#006294",
+    flexDirection: "row",
+  },
+  leftElement: {
+    marginLeft: 16,
+    marginRight: 25,
+    marginTop: 8,
+  },
+  centerElement: {
+    marginBottom: 20,
+  },
+  icon: {
+    marginHorizontal: 5,
+  },
+  scroll: {
+    backgroundColor: "#e5f2fa",
+    height: "100%",
+  },
+  header: {
+    fontWeight: "bold",
+    fontSize: 24,
+    paddingTop: 16,
+    color: "#fff",
+  },
   container: {
     flex: 1,
   },
@@ -100,11 +142,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: 'white'
   },
-  inputContainer: {
-    flexDirection: "row",
-    borderColor: "#000",
-    paddingBottom: 10,
-  },
   input: {
     width: '90%',
     borderWidth: 1,
@@ -112,7 +149,7 @@ const styles = StyleSheet.create({
     padding: 5,
     borderRadius: 15,
     color: '#000',
-    margin: 15,
+    margin: 5,
   },
   container_body: {
     width: '100%',
@@ -120,7 +157,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  buttonRegistrarse: {
+  btnAgregar: {
     backgroundColor: '#229CFF',
     width: '90%',
     height: 40,
@@ -128,20 +165,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderRadius: 5,
     marginTop: 6
-  },
-  text: {
-    textAlign: 'center',
-    marginTop: 30,
-    marginBottom: 0,
-    color: '#fff',
-  },
-  buttonLogin: {
-    backgroundColor: '#006294',
-    width: 300,
-    height: 40,
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderRadius: 5,
   },
   textBtnLogin: {
     textAlign: 'center',
@@ -154,15 +177,13 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginTop: 0,
     color: 'black',
-
-  }, icon: {
-    padding: 10,
   },
   containerInputs: {
     justifyContent: 'center', // Centrado vertical
     alignItems: 'center',
+    marginTop: 30,
   },
-  container_title:{
+  container_title: {
     backgroundColor: '#006294',
     borderBottomLeftRadius: 15,
     borderBottomRightRadius: 15,

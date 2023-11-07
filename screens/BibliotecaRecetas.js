@@ -1,15 +1,17 @@
 import React, { useState, useEffect } from "react";
+import Modal from "react-native-modal";
 import IconFA from "react-native-vector-icons/Ionicons";
 import Icon from "react-native-vector-icons/Fontisto";
 import { useNavigation } from "@react-navigation/native";
-import { StyleSheet, Text, View, Image, TouchableOpacity, ScrollView, Modal } from "react-native";
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { StyleSheet, Text, View, Image, TouchableOpacity, ScrollView } from "react-native";
 
 const BibliotecaScreen = () => {
   const navigation = useNavigation();
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
-  // const [modalVisibleEliminar, setModalVisibleEliminar] = useState(false);
-  const [modalVisibleFavorito, setModalVisibleFavorito] = useState(false);
+  const [datosUsuario, setDatosUsuario] = useState(null);
+  const [editModalVisible, setEditModalVisible] = useState(false);
 
   useEffect(() => {
     fetch("http://10.0.2.2:4000/api/recetas_biblioteca")
@@ -24,64 +26,91 @@ const BibliotecaScreen = () => {
       });
   }, []);
 
-  /*function eliminar(id) {
-    alert('Eliminado');
-    setModalVisibleEliminar(!modalVisibleEliminar);
-  }*/
+  const abrirModal = (item) => {
+    setEditModalVisible(true);
+    AsyncStorage.setItem('recetaFavorita', JSON.stringify(item));
+  };
 
-  function agregar() {
-    alert('Agregado')
-    setModalVisibleFavorito(!modalVisibleFavorito);
-  }
+  const confirmarAgregar = () => {
+    AsyncStorage.getItem('recetaFavorita')
+      .then((data) => {
+        if (data) {
+          // Obtener id del usuario logueado
+          AsyncStorage.getItem('datosUsuario')
+            .then((data) => {
+              if (data) {
+                const datos = JSON.parse(data);
+                setDatosUsuario(datos);
+              }
+            })
+            .catch((error) => {
+              console.error('Error al recuperar datos de AsyncStorage:', error);
+            });          
+          // Agregar receta a favoritos
+          const postData = {
+            id: 0,
+            id_receta_biblio: data,
+            id_foraneo: datosUsuario.userId
+          }
+
+          fetch('http://10.0.2.2:4000/api/recetas_biblioteca', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(postData),
+          })
+            .then(response => {
+              if (response.ok) {
+                return response.json();
+              } else {
+                throw new Error('Error en la solicitud POST');
+              }
+            })
+            .then(data => {
+              console.log(data)
+              if (data.status == 200) {
+                alert('La receta ha sido agregada a favoritos correctamente.');
+              } else {
+                alert('No se pudo completar la petición. Vuelve a intentarlo');
+              }
+            })
+            .catch(error => {
+              console.error('Error al realizar la solicitud:', error);
+              alert('Error al realizar la solicitud.')
+            });
+        }
+      })
+      .catch((error) => {
+        console.error('Error al recuperar datos de AsyncStorage:', error);
+      });
+    setEditModalVisible(false);
+  };
 
   return (
-    <View>
-      {/*<Modal
-        transparent={true}
-        animationType="slide"
-        visible={modalVisibleEliminar}
-      >
-        <View style={styles.modal}>
-          <View style={styles.vista_modal}>
-            <Text style={styles.nombre}>Desea eliminar esta receta?</Text>
-            <View style={styles.contenido_icons}>
-              <TouchableOpacity style={styles.button_elim} onPress={eliminar}>
-                <Text style={styles.button_text}>Eliminar</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={styles.button_can}
-                onPress={() => {
-                  setModalVisibleEliminar(!modalVisibleEliminar);
-                }}
-              >
-                <Text style={styles.button_text}>Cancelar</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </View>
-              </Modal>*/}
-
-      <Modal
-        transparent={true}
-        animationType="slide"
-        visible={modalVisibleFavorito}
-      >
-        <View style={styles.modal}>
-          <View style={styles.vista_modal}>
-            <Text style={styles.nombre}>Desea agregar a favoritos?</Text>
-            <View style={styles.contenido_icons}>
-              <TouchableOpacity style={styles.button_elim} onPress={agregar}>
-                <Text style={styles.button_text}>Agregar</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={styles.button_can}
-                onPress={() => {
-                  setModalVisibleFavorito(!modalVisibleFavorito);
-                }}
-              >
-                <Text style={styles.button_text}>Cancelar</Text>
-              </TouchableOpacity>
-            </View>
+    <View style={styles.componentContainer}>
+      <Modal isVisible={editModalVisible}>
+        <View style={styles.modalContainer}>
+          <Text style={styles.modalText}>
+            ¿Desea guardar esta receta a favoritos?
+          </Text>
+          <View style={styles.containerButtonsModal}>
+            <TouchableOpacity
+              style={styles.confirmarButton}
+              onPress={() => {
+                confirmarAgregar();
+              }}
+            >
+              <Text>Confirmar</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.cancelarButton}
+              onPress={() => {
+                setEditModalVisible(false);
+              }}
+            >
+              <Text>Cancelar</Text>
+            </TouchableOpacity>
           </View>
         </View>
       </Modal>
@@ -126,7 +155,8 @@ const BibliotecaScreen = () => {
                     </View>
                   </View>
                   <View style={styles.contenido_icons}>
-                    <TouchableOpacity onPress={() => { setModalVisibleFavorito(!modalVisibleFavorito) }}>
+                    <TouchableOpacity
+                      onPress={() => abrirModal(item.id)}>
                       <Icon
                         style={styles.icon}
                         name="favorite"
@@ -134,14 +164,6 @@ const BibliotecaScreen = () => {
                         size={25}
                       />
                     </TouchableOpacity>
-                    {/*<TouchableOpacity style={styles.icon} onPress={() => { setModalVisibleEliminar(!modalVisibleEliminar) }}>
-                      <Icon
-                        style={styles.icon}
-                        name="trash"
-                        color="#c13145"
-                        size={25}
-                      />
-                  </TouchableOpacity>*/}
                   </View>
                 </View>
               ))}
@@ -154,6 +176,45 @@ const BibliotecaScreen = () => {
 };
 
 const styles = StyleSheet.create({
+  componentContainer: {
+    flex: 1,
+    backgroundColor: '#e5f2fa'
+  },
+  containerButtonsModal: {
+    flexDirection: "row",
+    width: '80%',
+    justifyContent: "space-around",
+    alignItems: "center",
+  },
+  confirmarButton: {
+    backgroundColor: '#06BA63',
+    padding: 10,
+    borderRadius: 5,
+    marginTop: 10,
+    alignSelf: 'center',
+  },
+  modalContainer: {
+    backgroundColor: 'white',
+    padding: 20,
+    borderRadius: 10,
+    alignItems: 'center',
+  },
+  modalText: {
+    fontSize: 18,
+    marginBottom: 10,
+  },
+  cancelarButton: {
+    backgroundColor: 'gray',
+    padding: 10,
+    borderRadius: 5,
+    marginTop: 10,
+    alignSelf: 'center',
+  },
+  cancelarButtonText: {
+    color: 'white',
+    fontSize: 18,
+    textAlign: 'center',
+  },
   headerContainer: {
     backgroundColor: "#006294",
     flexDirection: "row",
@@ -240,7 +301,7 @@ const styles = StyleSheet.create({
   },
   buttonLogin: {
     marginTop: 10
-  }
+  },
 });
 
 export default BibliotecaScreen;

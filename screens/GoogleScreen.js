@@ -30,7 +30,7 @@ const Screen = () => {
     const loggedIn = user !== undefined && user !== null;
 
     const navigate = (parametro) => {
-        const param1 = 0;
+        const param1 = 11;
         navigation.navigate('Home', { param1, parametro });
     };
 

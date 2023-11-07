@@ -3,7 +3,6 @@ import { StyleSheet, Text, View, Image, TouchableOpacity, TextInput } from 'reac
 import { useNavigation } from '@react-navigation/native';
 import IconAD from 'react-native-vector-icons/AntDesign';
 import IconFA from 'react-native-vector-icons/FontAwesome';
-import { loginUsuario } from '../src/api/api.js';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const LoginScreen = () => {

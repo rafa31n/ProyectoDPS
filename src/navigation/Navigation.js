@@ -2,17 +2,15 @@ import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { NavigationContainer } from '@react-navigation/native';
 
-import RegisterScreen from '../../screens/RegisterScreen';
-import LoginScreen from '../../screens/LoginScreen';
-import HomeScreen from '../../screens/HomeScreen';
-import GoogleScreen from '../../screens/GoogleScreen';
-import RecipesScreen from '../../screens/RecipesScreen';
-import IngredientList from '../../screens/IngredientListScreen';
-
-import RecetasScreen from '../../screens/RecipesScreen';
-import BibliotecaScreen from '../../screens/BibliotecaScreen';
-import MisRecetasScreen from '../../screens/MisRecetasScreen';
-import ProfileScreen from '../../screens/ProfileScreen';
+import Register from '../../screens/RegisterScreen';
+import Login from '../../screens/LoginScreen';
+import Home from '../../screens/HomeScreen';
+import Google from '../../screens/GoogleScreen';
+import Recetas from '../../screens/Recetas';
+import ListaIngredientes from '../../screens/ListaDeCompra';
+import BibliotecaRecetas from '../../screens/BibliotecaRecetas';
+import MisRecetas from '../../screens/MisRecetas';
+import MiPerfil from '../../screens/ProfileScreen';
 import ModificarReceta from '../../screens/ModificarReceta';
 
 const Stack = createNativeStackNavigator();
@@ -20,19 +18,16 @@ const Stack = createNativeStackNavigator();
 const Navigation = () => {
     return (
         <NavigationContainer>
-            <Stack.Navigator
-                screenOptions={{ headerShown: false }}
-            >
-                <Stack.Screen name='Login' component={LoginScreen} />
-                <Stack.Screen name='Home' component={HomeScreen} />
-                <Stack.Screen name='AgregarRecetas' component={RecipesScreen} />
-                <Stack.Screen name='AgregarIngredientes' component={IngredientList} />
-                <Stack.Screen name='Google' component={GoogleScreen} />
-                <Stack.Screen name='Register' component={RegisterScreen} />
-                <Stack.Screen name='Agregar recetas' component={RecetasScreen} />
-                <Stack.Screen name='Biblioteca recetas' component={BibliotecaScreen} />
-                <Stack.Screen name='Mis recetas' component={MisRecetasScreen} />
-                <Stack.Screen name='Perfil' component={ProfileScreen} />
+            <Stack.Navigator screenOptions={{ headerShown: false }}>
+                <Stack.Screen name='Login' component={Login} />
+                <Stack.Screen name='Home' component={Home} />
+                <Stack.Screen name='AgregarIngredientes' component={ListaIngredientes} />
+                <Stack.Screen name='Google' component={Google} />
+                <Stack.Screen name='Register' component={Register} />
+                <Stack.Screen name='Agregar recetas' component={Recetas} />
+                <Stack.Screen name='Biblioteca recetas' component={BibliotecaRecetas} />
+                <Stack.Screen name='Mis recetas' component={MisRecetas} />
+                <Stack.Screen name='Perfil' component={MiPerfil} />
                 <Stack.Screen name='Modificar' component={ModificarReceta} />
             </Stack.Navigator>
         </NavigationContainer>
