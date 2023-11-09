@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, Image, ScrollView } from "react-native";
 import { useRoute } from '@react-navigation/native';
 import { useNavigation } from "@react-navigation/native";
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import Icon from 'react-native-vector-icons/EvilIcons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import IconFA from "react-native-vector-icons/Ionicons";
 
@@ -41,7 +41,7 @@ const HomeScreen = () => {
                             style={styles.buttonLogin}
                             onPress={() => navigation.navigate('Perfil')}>
                             <Icon style={styles.icon}
-                                name='account' color='white' size={50} />
+                                name='user' color='white' size={50} />
                         </TouchableOpacity>
                     </View>
                 </View>
@@ -50,29 +50,41 @@ const HomeScreen = () => {
 
                     <TouchableOpacity onPress={() => navigation.navigate('AgregarIngredientes')}>
                         <View style={styles.articleContainer}>
-                            <Image style={styles.image} source={{ uri: 'https://cdn-icons-png.flaticon.com/512/4543/4543179.png' }} />
-                            <Text style={styles.articelTitle}>Lista de compra</Text>
+                            <Image style={styles.image}
+                                source={{ uri: 'https://cdn-icons-png.flaticon.com/512/4543/4543179.png' }} />
+                            <Text style={styles.articelTitle}>Listas de recetas</Text>
                         </View>
                     </TouchableOpacity>
 
-                    <TouchableOpacity onPress={() => navigation.navigate('Agregar recetas')}>
+                    <TouchableOpacity onPress={() => navigation.navigate('AgregarIngredientes')}>
                         <View style={styles.articleContainer}>
-                            <Image style={styles.image} source={{ uri: 'https://cdn-icons-png.flaticon.com/512/1091/1091916.png' }} />
-                            <Text style={styles.articelTitle}>Agregar receta</Text>
+                            <Image style={styles.image}
+                                source={require('../src/imgs/lista_personal.jpeg')} />
+                            <Text style={styles.articelTitle}>Listas personales</Text>
                         </View>
                     </TouchableOpacity>
 
-                    <TouchableOpacity onPress={() => navigation.navigate('Biblioteca recetas')}>
+                    <TouchableOpacity onPress={() => navigation.navigate('AgregarRecetas')}>
                         <View style={styles.articleContainer}>
-                            <Image style={styles.image} source={{ uri: 'https://cdn-icons-png.flaticon.com/512/196/196039.png' }} />
+                            <Image style={styles.image}
+                                source={require('../src/imgs/receta_personal.jpeg')} />
+                            <Text style={styles.articelTitle}>Recetas personales</Text>
+                        </View>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity onPress={() => navigation.navigate('BibliotecaRecetas')}>
+                        <View style={styles.articleContainer}>
+                            <Image style={styles.image}
+                                source={{ uri: 'https://cdn-icons-png.flaticon.com/512/196/196039.png' }} />
                             <Text style={styles.articelTitle}>Biblioteca de recetas</Text>
                         </View>
                     </TouchableOpacity>
 
-                    <TouchableOpacity onPress={() => navigation.navigate('Mis recetas')}>
+                    <TouchableOpacity onPress={() => navigation.navigate('MisRecetas')}>
                         <View style={styles.articleContainer}>
-                            <Image style={styles.image} source={{ uri: 'https://cdn-icons-png.flaticon.com/512/3003/3003655.png' }} />
-                            <Text style={styles.articelTitle}>Mis recetas</Text>
+                            <Image style={styles.image}
+                                source={{ uri: 'https://cdn-icons-png.flaticon.com/512/3003/3003655.png' }} />
+                            <Text style={styles.articelTitle}>Recetas favoritas</Text>
                         </View>
                     </TouchableOpacity>
 
@@ -83,6 +95,9 @@ const HomeScreen = () => {
 };
 
 const styles = StyleSheet.create({
+    icon: {
+        padding: 5,
+    },
     componentContainer: {
         flex: 1,
         backgroundColor: '#e5f2fa'
@@ -109,7 +124,8 @@ const styles = StyleSheet.create({
         fontSize: 24,
         paddingTop: 16,
         color: "#fff",
-        textAlign: 'center'
+        textAlign: 'center',
+        textTransform: 'uppercase',
     },
     headerText: {
         fontSize: 24,

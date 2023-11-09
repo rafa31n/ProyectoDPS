@@ -6,12 +6,14 @@ import Register from '../../screens/RegisterScreen';
 import Login from '../../screens/LoginScreen';
 import Home from '../../screens/HomeScreen';
 import Google from '../../screens/GoogleScreen';
-import Recetas from '../../screens/Recetas';
+import Recetas from '../../screens/RecetasPersonales';
 import ListaIngredientes from '../../screens/ListaDeCompra';
 import BibliotecaRecetas from '../../screens/BibliotecaRecetas';
-import MisRecetas from '../../screens/MisRecetas';
-import MiPerfil from '../../screens/ProfileScreen';
+import MisRecetas from '../../screens/RecetasFavoritas';
+import MiPerfil from '../../screens/MiPerfil';
 import ModificarReceta from '../../screens/ModificarReceta';
+import AddRecetaPersonal from '../../screens/AddRecetaPersonal';
+import EditRecetaPersonal from '../../screens/EditRecetaPersonal';
 
 const Stack = createNativeStackNavigator();
 
@@ -24,11 +26,13 @@ const Navigation = () => {
                 <Stack.Screen name='AgregarIngredientes' component={ListaIngredientes} />
                 <Stack.Screen name='Google' component={Google} />
                 <Stack.Screen name='Register' component={Register} />
-                <Stack.Screen name='Agregar recetas' component={Recetas} />
-                <Stack.Screen name='Biblioteca recetas' component={BibliotecaRecetas} />
-                <Stack.Screen name='Mis recetas' component={MisRecetas} />
+                <Stack.Screen name='AgregarRecetas' component={Recetas} />
+                <Stack.Screen name='BibliotecaRecetas' component={BibliotecaRecetas} />
+                <Stack.Screen name='MisRecetas' component={MisRecetas} />
                 <Stack.Screen name='Perfil' component={MiPerfil} />
                 <Stack.Screen name='Modificar' component={ModificarReceta} />
+                <Stack.Screen name='AddRecetaPersonal' component={AddRecetaPersonal} />
+                <Stack.Screen name='EditRecetaPersonal' component={EditRecetaPersonal} />
             </Stack.Navigator>
         </NavigationContainer>
     )

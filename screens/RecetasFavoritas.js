@@ -3,16 +3,63 @@ import { StyleSheet, Text, View, Image, TouchableOpacity, ScrollView } from "rea
 import IconFA from "react-native-vector-icons/Ionicons";
 import { useNavigation } from "@react-navigation/native";
 import Modal from "react-native-modal";
-import Icon from "react-native-vector-icons/Fontisto";
+import IconOC from "react-native-vector-icons/Octicons";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const MisRecetasScreen = () => {
   const navigation = useNavigation();
-  const [data, setData] = useState(null);
+  const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [datosUsuario, setDatosUsuario] = useState(null);
+  const [editModalVisible, setEditModalVisible] = useState(false);
+  const [idRecetasArreglo, setIdRecetasArreglo] = useState([]);
 
-  useEffect(() => {
+  const eliminarReceta = (item) => {
+    const idReceta = idRecetasArreglo[item];
+    setEditModalVisible(true);
+    AsyncStorage.setItem('recetaFavoritaElim', JSON.stringify(idReceta));
+  };
+
+  const confirmarEliminar = () => {
+    AsyncStorage.getItem('recetaFavoritaElim')
+      .then((data) => {
+        if (data) {
+          const postData = {
+            id: data,
+          }
+          fetch('http://10.0.2.2:4000/api/recetas_biblioteca', {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(postData),
+          })
+            .then(response => {
+              if (response.ok) {
+                return response.json();
+              } else {
+                throw new Error('Error en la solicitud POST');
+              }
+            })
+            .then(data => {
+              console.log(data)
+              if (data.status === 200) {
+                peticionFetch();
+              }
+            })
+            .catch(error => {
+              console.error('Error al realizar la solicitud:', error);
+              alert('Error al realizar la solicitud.')
+            });
+        }
+      })
+      .catch((error) => {
+        console.error('Error al recuperar datos de AsyncStorage:', error);
+      });
+    setEditModalVisible(false);
+  };
+
+  const peticionFetch = () => {
+    const fetchPromises = [];
     AsyncStorage.getItem('datosUsuario')
       .then((data) => {
         if (data) {
@@ -21,19 +68,29 @@ const MisRecetasScreen = () => {
             .then((response) => response.json())
             .then((data) => {
               if (data.body[0]) {
-                for (let i = 0; i < 2; i++) {
-                  fetch("http://10.0.2.2:4000/api/recetas_biblioteca/" + data.body[i].id_receta_biblio)
+                const bodyArray = data.body;
+                const cantidadDeObjetos = bodyArray.length;
+                for (let i = 0; i < cantidadDeObjetos; i++) {
+                  const idReceta = data.body[i].id;
+                  setIdRecetasArreglo((prevIds) => [...prevIds, idReceta]);
+                  const promise = fetch("http://10.0.2.2:4000/api/recetas_biblioteca/" + data.body[i].id_receta_biblio)
                     .then((response) => response.json())
-                    .then((data) => {
-                      console.log(data.body)
-                      //setData(data)
-                      //setLoading(false);
-                    })
+                    .then((jsonData) => jsonData.body)
                     .catch((error) => {
-                      console.error("Error al obtener los datos:", error);
-                      setLoading(false);
+                      console.error('Error en la solicitud:', error);
+                      return [];
                     });
+                  fetchPromises.push(promise);
                 }
+                Promise.all(fetchPromises)
+                  .then((results) => {
+                    // Concatena los resultados en un solo array
+                    const concatenatedData = results.flat();
+                    setData(concatenatedData);
+                  })
+                  .catch((error) => {
+                    console.error('Error al obtener datos:', error);
+                  });
               }
             })
             .catch((error) => {
@@ -45,10 +102,40 @@ const MisRecetasScreen = () => {
       .catch((error) => {
         console.error('Error al recuperar datos de AsyncStorage:', error);
       });
+  }
+
+  useEffect(() => {
+    peticionFetch();
   }, []);
 
   return (
     <View style={styles.componentContainer}>
+      <Modal isVisible={editModalVisible}>
+        <View style={styles.modalContainer}>
+          <Text style={styles.modalText}>
+            ¿Desea eliminar esta receta de favoritos?
+          </Text>
+          <View style={styles.containerButtonsModal}>
+            <TouchableOpacity
+              style={styles.confirmarButton}
+              onPress={() => {
+                confirmarEliminar();
+              }}
+            >
+              <Text>Confirmar</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.cancelarButton}
+              onPress={() => {
+                setEditModalVisible(false);
+              }}
+            >
+              <Text>Cancelar</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+
       <ScrollView>
         <View style={styles.headerContainer}>
           <View style={styles.leftElement}>
@@ -60,21 +147,20 @@ const MisRecetasScreen = () => {
                 style={styles.icon}
                 name="arrow-back-circle"
                 color="#fff"
-                size={25}
+                size={35}
               />
             </TouchableOpacity>
           </View>
           <View style={styles.centerElement}>
-            <Text style={styles.header}>Mis recetas</Text>
+            <Text style={styles.header}>Recetas favoritas</Text>
           </View>
         </View>
 
         <View style={styles.scroll}>
-
           {data ? (
             <View>
-              {data.body.map((item) => (
-                <View style={styles.container} key={item.id}>
+              {data.map((item, index) => (
+                <View style={styles.container} key={index}>
                   <Image
                     style={styles.imagen}
                     source={{
@@ -91,12 +177,12 @@ const MisRecetasScreen = () => {
                   </View>
                   <View style={styles.contenido_icons}>
                     <TouchableOpacity
-                      onPress={() => abrirModal(item.id)}>
-                      <Icon
+                      onPress={() => eliminarReceta(index)}>
+                      <IconOC
                         style={styles.icon}
-                        name="favorite"
+                        name="repo-deleted"
                         color="#c13145"
-                        size={25}
+                        size={35}
                       />
                     </TouchableOpacity>
                   </View>
@@ -108,6 +194,7 @@ const MisRecetasScreen = () => {
               <Text>No hay elementos agregados a favoritos.</Text>
             </View>
           )}
+
         </View>
       </ScrollView>
     </View>
@@ -115,6 +202,40 @@ const MisRecetasScreen = () => {
 };
 
 const styles = StyleSheet.create({
+  confirmarButton: {
+    backgroundColor: '#06BA63',
+    padding: 10,
+    borderRadius: 5,
+    marginTop: 10,
+    alignSelf: 'center',
+  },
+  containerButtonsModal: {
+    flexDirection: "row",
+    width: '80%',
+    justifyContent: "space-around",
+    alignItems: "center",
+  },
+  modalContainer: {
+    backgroundColor: 'white',
+    padding: 20,
+    borderRadius: 10,
+    alignItems: 'center',
+  },
+  modalText: {
+    fontSize: 18,
+    marginBottom: 10,
+  },
+  cancelarButton: {
+    backgroundColor: 'gray',
+    padding: 10,
+    borderRadius: 5,
+    marginTop: 10,
+    alignSelf: 'center',
+  },
+  tituloReceta: {
+    fontWeight: "bold",
+    fontSize: 16,
+  },
   componentContainer: {
     flex: 1,
     backgroundColor: '#e5f2fa'
@@ -191,6 +312,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     paddingTop: 16,
     color: "#fff",
+    textTransform: 'uppercase',
   },
   icons: {
     marginLeft: 15,

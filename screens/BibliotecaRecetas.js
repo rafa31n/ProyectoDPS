@@ -45,7 +45,7 @@ const BibliotecaScreen = () => {
             })
             .catch((error) => {
               console.error('Error al recuperar datos de AsyncStorage:', error);
-            });          
+            });
           // Agregar receta a favoritos
           const postData = {
             id: 0,
@@ -79,6 +79,8 @@ const BibliotecaScreen = () => {
               console.error('Error al realizar la solicitud:', error);
               alert('Error al realizar la solicitud.')
             });
+        }else{
+          alert('Error al realizar la solicitud.')
         }
       })
       .catch((error) => {
@@ -126,7 +128,7 @@ const BibliotecaScreen = () => {
                 style={styles.icon}
                 name="arrow-back-circle"
                 color="#fff"
-                size={25}
+                size={35}
               />
             </TouchableOpacity>
           </View>
@@ -136,6 +138,9 @@ const BibliotecaScreen = () => {
         </View>
 
         <View style={styles.scroll}>
+          <TouchableOpacity style={styles.btnScreen} onPress={() => navigation.navigate("MisRecetas")}>
+            <Text style={styles.btnScreenText}>Ver mis resetas favoritas</Text>
+          </TouchableOpacity>
           {data && data.error === false && (
             <View>
               {data.body.map((item) => (
@@ -161,7 +166,7 @@ const BibliotecaScreen = () => {
                         style={styles.icon}
                         name="favorite"
                         color="#c13145"
-                        size={25}
+                        size={35}
                       />
                     </TouchableOpacity>
                   </View>
@@ -176,6 +181,18 @@ const BibliotecaScreen = () => {
 };
 
 const styles = StyleSheet.create({
+  btnScreen: {
+    backgroundColor: '#3C7A89',
+    padding: 10,
+    borderRadius: 5,
+    margin: 10,
+    marginBottom: 0,
+  },
+  btnScreenText: {
+    color: '#F0EFF4',
+    fontSize: 16,
+    textAlign: 'center',
+  },
   componentContainer: {
     flex: 1,
     backgroundColor: '#e5f2fa'
@@ -232,6 +249,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     paddingTop: 16,
     color: "#fff",
+    textTransform: 'uppercase',
   },
   container: {
     backgroundColor: "#fff",
