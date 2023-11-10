@@ -183,7 +183,7 @@ const ProfileScreen = () => {
                 confirmarEditar();
               }}
             >
-              <Text>Confirmar</Text>
+              <Text style={styles.btnEditPerfilTxt}>Confirmar</Text>
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.cancelarButton}
@@ -191,7 +191,7 @@ const ProfileScreen = () => {
                 setEditModalVisible(false);
               }}
             >
-              <Text>Cancelar</Text>
+              <Text style={styles.btnEditPerfilTxt}>Cancelar</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -245,7 +245,7 @@ const ProfileScreen = () => {
                 <TouchableOpacity
                   style={styles.btnEditPerfil}
                   onPress={() => abrirModal()}>
-                  <Text>Editar perfil</Text>
+                  <Text style={styles.btnEditPerfilTxt}>Editar perfil</Text>
                 </TouchableOpacity>
 
                 <TouchableOpacity
@@ -309,6 +309,10 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     margin: 10,
     marginBottom: 0,
+  },
+  btnEditPerfilTxt: {
+    color: '#f5f5f5',
+    fontWeight: 'bold'
   },
   btnEditPassword: {
     backgroundColor: '#c13145',

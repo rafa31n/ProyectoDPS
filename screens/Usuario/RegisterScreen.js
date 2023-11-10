@@ -14,16 +14,17 @@ const RegisterScreen = () => {
 
   const navigation = useNavigation();
   const registrarse = async () => {
-    if (contrasena == confirmarContrasena && contrasena.length > 0) {
+    if (contrasena == confirmarContrasena && contrasena.length > 0 && nombres.length > 0
+      && apellidos.length > 0 && correo.length > 0 && confirmarContrasena.length > 0) {
       const nombre = nombres.split(' ');
       const apellido = apellidos.split(' ');
 
       const postData = {
         id: 0,
         primer_nombre: nombre[0],
-        segundo_nombre: nombre[1],
+        segundo_nombre: nombre[1] ? nombre[1] : '',
         primer_apellido: apellido[0],
-        segundo_apellido: apellido[1],
+        segundo_apellido: apellido[1] ? apellido[1] : '',
         username: usuario,
         contrasena: contrasena,
         correo: correo
@@ -54,7 +55,7 @@ const RegisterScreen = () => {
           alert('Error al realizar la solicitud.')
         });
     } else {
-      alert("Las contraseñas no coinciden. Revisa los datos.")
+      alert("Las contraseñas no coinciden. Revisa los campos solicitados.")
     }
   };
 

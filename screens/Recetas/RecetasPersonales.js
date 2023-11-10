@@ -6,13 +6,13 @@ import IconAD from 'react-native-vector-icons/AntDesign';
 import IconF from 'react-native-vector-icons/Feather';
 import IconMCI from 'react-native-vector-icons/MaterialCommunityIcons';
 import Modal from "react-native-modal";
-import { StyleSheet, Text, TextInput, TouchableOpacity, View, ScrollView } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View, ScrollView } from "react-native";
 
 const RecipesScreen = () => {
   const navigation = useNavigation();
   const [data, setData] = useState(null);
-  const [receta, setReceta] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [receta, setReceta] = useState(null);
   const [editModalVisible, setEditModalVisible] = useState(false);
   const [deleteModalVisible, setDeleteModalVisible] = useState(false);
 
@@ -40,6 +40,13 @@ const RecipesScreen = () => {
     AsyncStorage.setItem('recetaPersonal', JSON.stringify(item));
   };
 
+  const agregarIngredientes = (item, item2) => {
+    navigation.navigate('IngredienteReceta')
+    AsyncStorage.setItem('idRecetaIngredientes', JSON.stringify(item));
+    AsyncStorage.setItem('idRecetaTitulo', JSON.stringify(item2));
+
+  };
+
   const confirmarEliminar = () => {
     AsyncStorage.getItem('recetaPersonal')
       .then((data) => {
@@ -63,8 +70,9 @@ const RecipesScreen = () => {
             })
             .then(data => {
               console.log(data)
-              if (data.status === 200) {
-                peticionFetch();
+              if (data.error === false) {
+                alert(data.body)
+                navigation.navigate('Home')
               }
             })
             .catch(error => {
@@ -88,9 +96,10 @@ const RecipesScreen = () => {
           fetch("http://10.0.2.2:4000/api/recetas_personales/" + datos.userId)
             .then((response) => response.json())
             .then((data) => {
-              console.log(data)
-              setData(data);
-              setLoading(false);
+              if (data.body.length != 0) {
+                setData(data)
+                setLoading(false)
+              }
             })
             .catch((error) => {
               console.error("Error al obtener los datos:", error);
@@ -118,7 +127,8 @@ const RecipesScreen = () => {
                   <Text style={styles.tituloReceta}>{item.titulo}</Text>
                   <Text>Tiempo de comida: {item.tiempo_comida}</Text>
                   <Text>Duración: {item.duracion}</Text>
-                  <Text>Preparación: {item.preparacion}</Text>
+                  <Text>Preparación:</Text>
+                  <Text>{item.preparacion}</Text>
                 </View>
               ))}
             </View>
@@ -133,7 +143,7 @@ const RecipesScreen = () => {
               onPress={() => {
                 setEditModalVisible(false);
               }}>
-              <Text>Cerrar</Text>
+              <Text style={styles.btnText}>Cerrar</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -151,7 +161,7 @@ const RecipesScreen = () => {
                 confirmarEliminar();
               }}
             >
-              <Text>Confirmar</Text>
+              <Text style={styles.btnText}>Confirmar</Text>
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.cancelarButton}
@@ -159,7 +169,7 @@ const RecipesScreen = () => {
                 setDeleteModalVisible(false);
               }}
             >
-              <Text>Cancelar</Text>
+              <Text style={styles.btnText}>Cancelar</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -188,6 +198,7 @@ const RecipesScreen = () => {
         <TouchableOpacity style={styles.btnScreen} onPress={() => navigation.navigate("AddRecetaPersonal")}>
           <Text style={styles.btnScreenText}>Agregar receta personal</Text>
         </TouchableOpacity>
+
         {data ? (
           <View>
             {data.body.map((item, index) => (
@@ -229,7 +240,7 @@ const RecipesScreen = () => {
                     />
                   </TouchableOpacity>
                   <TouchableOpacity
-                    onPress={() => agregarIngredientes(item.id)}>
+                    onPress={() => agregarIngredientes(item.id, item.titulo)}>
                     <IconMCI
                       style={styles.icon}
                       name="food"
@@ -242,15 +253,20 @@ const RecipesScreen = () => {
             ))}
           </View>
         ) : (
-          <View style={styles.containerBody}>
-            <Text>No hay elementos agregados a favoritos.</Text>
+          <View style={styles.container}>
+            <Text>No hay recetas personales guardadas.</Text>
           </View>
         )}
+
       </ScrollView>
     </View>
   );
 }
 const styles = StyleSheet.create({
+  btnText: {
+    color: '#f5f5f5',
+    fontWeight: 'bold'
+  },
   containerButtonsModal: {
     flexDirection: "row",
     width: '80%',
@@ -262,7 +278,7 @@ const styles = StyleSheet.create({
     margin: 15,
   },
   confirmarButton: {
-    backgroundColor: '#06BA63',
+    backgroundColor: '#c13145',
     padding: 10,
     borderRadius: 5,
     marginTop: 10,
@@ -286,7 +302,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   btnScreen: {
-    backgroundColor: '#3C7A89',
+    backgroundColor: '#016FB9',
     padding: 10,
     borderRadius: 5,
     margin: 10,

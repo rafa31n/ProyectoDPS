@@ -42,8 +42,11 @@ const MisRecetasScreen = () => {
             })
             .then(data => {
               console.log(data)
-              if (data.status === 200) {
-                peticionFetch();
+              if (data.error === false) {
+                alert(data.body)
+                navigation.navigate('Home');
+              } else {
+                alert(data.body)
               }
             })
             .catch(error => {
@@ -106,6 +109,7 @@ const MisRecetasScreen = () => {
 
   useEffect(() => {
     peticionFetch();
+    console.log(data)
   }, []);
 
   return (
@@ -122,7 +126,7 @@ const MisRecetasScreen = () => {
                 confirmarEliminar();
               }}
             >
-              <Text>Confirmar</Text>
+              <Text style={styles.btnText}>Confirmar</Text>
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.cancelarButton}
@@ -130,7 +134,7 @@ const MisRecetasScreen = () => {
                 setEditModalVisible(false);
               }}
             >
-              <Text>Cancelar</Text>
+              <Text style={styles.btnText}>Cancelar</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -157,7 +161,11 @@ const MisRecetasScreen = () => {
         </View>
 
         <View style={styles.scroll}>
-          {data ? (
+          {data.length === 0 ? (
+            <View style={styles.container}>
+              <Text>No hay elementos agregados a favoritos.</Text>
+            </View>
+          ) : (
             <View>
               {data.map((item, index) => (
                 <View style={styles.container} key={index}>
@@ -170,7 +178,7 @@ const MisRecetasScreen = () => {
                   <View style={styles.contenido}>
                     <View>
                       <Text style={styles.tituloReceta}>{item.titulo}</Text>
-                      <Text>Tiempo de comida: {item.tiempo_comida}</Text>
+                      <Text>Tipo de comida: {item.tipo_comida}</Text>
                       <Text>Duración: {item.duracion}</Text>
                       <Text>Preparación: {item.preparacion}</Text>
                     </View>
@@ -189,10 +197,6 @@ const MisRecetasScreen = () => {
                 </View>
               ))}
             </View>
-          ) : (
-            <View style={styles.containerBody}>
-              <Text>No hay elementos agregados a favoritos.</Text>
-            </View>
           )}
 
         </View>
@@ -202,8 +206,12 @@ const MisRecetasScreen = () => {
 };
 
 const styles = StyleSheet.create({
+  btnText: {
+    color: '#f5f5f5',
+    fontWeight: 'bold'
+  },
   confirmarButton: {
-    backgroundColor: '#06BA63',
+    backgroundColor: '#c13145',
     padding: 10,
     borderRadius: 5,
     marginTop: 10,
@@ -301,8 +309,8 @@ const styles = StyleSheet.create({
   },
   contenido_icons: {
     flexDirection: "row",
-    marginTop: 10,
-    alignSelf: "flex-end",
+    marginTop: 15,
+    alignSelf: "center",
   },
   descripcion: {
     fontSize: 14,

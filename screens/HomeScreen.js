@@ -4,7 +4,6 @@ import { useRoute } from '@react-navigation/native';
 import { useNavigation } from "@react-navigation/native";
 import Icon from 'react-native-vector-icons/EvilIcons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import IconFA from "react-native-vector-icons/Ionicons";
 
 const HomeScreen = () => {
     const route = useRoute();

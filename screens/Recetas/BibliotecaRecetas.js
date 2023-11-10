@@ -10,7 +10,6 @@ const BibliotecaScreen = () => {
   const navigation = useNavigation();
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [datosUsuario, setDatosUsuario] = useState(null);
   const [editModalVisible, setEditModalVisible] = useState(false);
 
   useEffect(() => {
@@ -36,50 +35,51 @@ const BibliotecaScreen = () => {
       .then((data) => {
         if (data) {
           // Obtener id del usuario logueado
+          const id_receta_biblio = data;
           AsyncStorage.getItem('datosUsuario')
             .then((data) => {
               if (data) {
                 const datos = JSON.parse(data);
-                setDatosUsuario(datos);
+                // Agregar receta a favoritos
+                const postData = {
+                  id: 0,
+                  id_receta_biblio: id_receta_biblio,
+                  id_foraneo: datos.userId
+                }
+
+                fetch('http://10.0.2.2:4000/api/recetas_biblioteca', {
+                  method: 'POST',
+                  headers: {
+                    'Content-Type': 'application/json',
+                  },
+                  body: JSON.stringify(postData),
+                })
+                  .then(response => {
+                    if (response.ok) {
+                      return response.json();
+                    } else {
+                      throw new Error('Error en la solicitud POST');
+                    }
+                  })
+                  .then(data => {
+                    console.log(data)
+                    if (data.error === false) {
+                      alert(data.body);
+                    } else {
+                      alert(data.body);
+                    }
+                  })
+                  .catch(error => {
+                    console.error('Error al realizar la solicitud:', error);
+                    alert('Error al realizar la solicitud.')
+                  });
               }
             })
             .catch((error) => {
               console.error('Error al recuperar datos de AsyncStorage:', error);
             });
-          // Agregar receta a favoritos
-          const postData = {
-            id: 0,
-            id_receta_biblio: data,
-            id_foraneo: datosUsuario.userId
-          }
 
-          fetch('http://10.0.2.2:4000/api/recetas_biblioteca', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(postData),
-          })
-            .then(response => {
-              if (response.ok) {
-                return response.json();
-              } else {
-                throw new Error('Error en la solicitud POST');
-              }
-            })
-            .then(data => {
-              console.log(data)
-              if (data.status == 200) {
-                alert('La receta ha sido agregada a favoritos correctamente.');
-              } else {
-                alert('No se pudo completar la petición. Vuelve a intentarlo');
-              }
-            })
-            .catch(error => {
-              console.error('Error al realizar la solicitud:', error);
-              alert('Error al realizar la solicitud.')
-            });
-        }else{
+        } else {
           alert('Error al realizar la solicitud.')
         }
       })
@@ -103,7 +103,7 @@ const BibliotecaScreen = () => {
                 confirmarAgregar();
               }}
             >
-              <Text>Confirmar</Text>
+              <Text style={styles.btnText}>Confirmar</Text>
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.cancelarButton}
@@ -111,7 +111,7 @@ const BibliotecaScreen = () => {
                 setEditModalVisible(false);
               }}
             >
-              <Text>Cancelar</Text>
+              <Text style={styles.btnText}>Cancelar</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -154,7 +154,7 @@ const BibliotecaScreen = () => {
                   <View style={styles.contenido}>
                     <View>
                       <Text style={styles.tituloReceta}>{item.titulo}</Text>
-                      <Text>Tiempo de comida: {item.tiempo_comida}</Text>
+                      <Text>Tipo de comida: {item.tipo_comida}</Text>
                       <Text>Duración: {item.duracion}</Text>
                       <Text>Preparación: {item.preparacion}</Text>
                     </View>
@@ -181,8 +181,12 @@ const BibliotecaScreen = () => {
 };
 
 const styles = StyleSheet.create({
+  btnText: {
+    color: '#f5f5f5',
+    fontWeight: 'bold'
+  },
   btnScreen: {
-    backgroundColor: '#3C7A89',
+    backgroundColor: '#016FB9',
     padding: 10,
     borderRadius: 5,
     margin: 10,
@@ -287,8 +291,8 @@ const styles = StyleSheet.create({
   },
   contenido_icons: {
     flexDirection: "row",
-    marginTop: 10,
-    alignSelf: "flex-end",
+    marginTop: 15,
+    alignSelf: "center",
   },
   modal: {
     backgroundColor: '#000000aa',

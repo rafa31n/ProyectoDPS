@@ -2,18 +2,21 @@ import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { NavigationContainer } from '@react-navigation/native';
 
-import Register from '../../screens/RegisterScreen';
-import Login from '../../screens/LoginScreen';
 import Home from '../../screens/HomeScreen';
-import Google from '../../screens/GoogleScreen';
-import Recetas from '../../screens/RecetasPersonales';
-import ListaIngredientes from '../../screens/ListaDeCompra';
-import BibliotecaRecetas from '../../screens/BibliotecaRecetas';
-import MisRecetas from '../../screens/RecetasFavoritas';
-import MiPerfil from '../../screens/MiPerfil';
-import ModificarReceta from '../../screens/ModificarReceta';
-import AddRecetaPersonal from '../../screens/AddRecetaPersonal';
-import EditRecetaPersonal from '../../screens/EditRecetaPersonal';
+//USUARIO
+import Register from '../../screens/Usuario/RegisterScreen';
+import Login from '../../screens/Usuario/LoginScreen';
+import Google from '../../screens/Usuario/GoogleScreen';
+import MiPerfil from '../../screens/Usuario/MiPerfil';
+//RECETAS
+import AddRecetaPersonal from '../../screens/Recetas/AddRecetaPersonal';
+import BibliotecaRecetas from '../../screens/Recetas/BibliotecaRecetas';
+import EditRecetaPersonal from '../../screens/Recetas/EditRecetaPersonal';
+import IngredienteReceta from '../../screens/Recetas/IngredientesReceta';
+import Recetas from '../../screens/Recetas/RecetasPersonales';
+import MisRecetas from '../../screens/Recetas/RecetasFavoritas';
+//LISTAS
+import ListaIngredientes from '../../screens/Listas/ListaDeCompra';
 
 const Stack = createNativeStackNavigator();
 
@@ -30,9 +33,9 @@ const Navigation = () => {
                 <Stack.Screen name='BibliotecaRecetas' component={BibliotecaRecetas} />
                 <Stack.Screen name='MisRecetas' component={MisRecetas} />
                 <Stack.Screen name='Perfil' component={MiPerfil} />
-                <Stack.Screen name='Modificar' component={ModificarReceta} />
                 <Stack.Screen name='AddRecetaPersonal' component={AddRecetaPersonal} />
                 <Stack.Screen name='EditRecetaPersonal' component={EditRecetaPersonal} />
+                <Stack.Screen name='IngredienteReceta' component={IngredienteReceta} />
             </Stack.Navigator>
         </NavigationContainer>
     )

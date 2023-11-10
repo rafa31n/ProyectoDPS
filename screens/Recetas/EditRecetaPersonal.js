@@ -2,17 +2,18 @@ import React, { useState, useEffect } from "react";
 import { useNavigation } from "@react-navigation/native";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import IconFA from "react-native-vector-icons/Ionicons";
-import IconAD from 'react-native-vector-icons/AntDesign';
 import { Picker } from '@react-native-picker/picker';
 import { StyleSheet, Text, TextInput, TouchableOpacity, View, ScrollView, Platform } from "react-native";
 import DateTimePicker from '@react-native-community/datetimepicker';
-import { color } from "@rneui/base";
 
 const AddRecetaPersonal = () => {
     const navigation = useNavigation();
+    const [data, setData] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [idReceta, setIdReceta] = useState('');
     const [titulo, setTitulo] = useState('');
     const [preparacion, setPreparacion] = useState('');
-    const [tiempoComida, setTiempoComida] = useState('Desayuno');
+    const [tiempoComida, setTiempoComida] = useState('');
 
     //Date time picker
     const [date, setDate] = useState(new Date());
@@ -50,7 +51,7 @@ const AddRecetaPersonal = () => {
         setPreparacion(text)
     };
 
-    const agregarReceta = () => {
+    const editarReceta = () => {
         if (titulo.length > 0 && tiempoComida.length > 0
             && preparacion.length > 0 && duracion.length > 0) {
             AsyncStorage.getItem('datosUsuario')
@@ -59,7 +60,7 @@ const AddRecetaPersonal = () => {
                         const datos = JSON.parse(data);
 
                         const postData = {
-                            id: 0,
+                            id: idReceta,
                             titulo: titulo,
                             tiempo_comida: tiempoComida,
                             duracion: duracion,
@@ -82,10 +83,9 @@ const AddRecetaPersonal = () => {
                                 }
                             })
                             .then(data => {
-                                console.log(data)
                                 if (data.status == 200) {
-                                    alert('Receta personal añadida correctamente.')    
-                                    navigation.navigate('Home')                                                                   
+                                    alert('Receta personal actualizada correctamente.')
+                                    navigation.navigate('Home')
                                 } else {
                                     alert('Error al realizar la solicitud.');
                                 }
@@ -103,6 +103,37 @@ const AddRecetaPersonal = () => {
             alert("Completa todos los campos solicitados.")
         }
     }
+
+    const peticionFetch = () => {
+        AsyncStorage.getItem('idRecetaEditar')
+            .then((data) => {
+                if (data) {
+                    console.log(data)
+                    const datos = JSON.parse(data);
+                    fetch("http://10.0.2.2:4000/api/recetas_personales/uno/" + datos)
+                        .then((response) => response.json())
+                        .then((data) => {
+                            setIdReceta(data.body[0].id)
+                            setTitulo(data.body[0].titulo)
+                            setTiempoComida(data.body[0].tiempo_comida)
+                            setDuracion(data.body[0].duracion)
+                            setPreparacion(data.body[0].preparacion)
+                        })
+                        .catch((error) => {
+                            console.error("Error al obtener los datos:", error);
+                            setLoading(false);
+                        });
+                }
+            })
+            .catch((error) => {
+                console.error('Error al recuperar datos de AsyncStorage:', error);
+            });
+    }
+
+
+    useEffect(() => {
+        peticionFetch();
+    }, []);
 
     return (
         <View style={styles.componentContainer}>
@@ -122,71 +153,73 @@ const AddRecetaPersonal = () => {
                         </TouchableOpacity>
                     </View>
                     <View style={styles.centerElement}>
-                        <Text style={styles.header}>Añadir receta personal</Text>
+                        <Text style={styles.header}>Editar receta personal</Text>
                     </View>
                 </View>
 
                 <View style={styles.containerBody}>
                     <View>
-                        <Text style={styles.label}>Titulo:</Text>
-                        <TextInput style={styles.txtInput}
-                            value={titulo}
-                            onChangeText={handleInput1Change}></TextInput>
+                        <View>
+                            <Text style={styles.label}>Titulo:</Text>
+                            <TextInput style={styles.txtInput}
+                                value={titulo}
+                                onChangeText={handleInput1Change}></TextInput>
 
-                        <Text style={styles.label}>Tiempo comida:</Text>
-                        <View
-                            style={{
-                                borderWidth: 1,
-                                borderRadius: 5
-                            }}>
-                            <Picker
-                                selectedValue={tiempoComida}
-                                onValueChange={(itemValue, itemIndex) => setTiempoComida(itemValue)}
-                            >
-                                {optionsTiempoComida.map((option) => (
-                                    <Picker.Item label={option.label} value={option.value} key={option.value} />
-                                ))}
-                            </Picker>
-                        </View>
+                            <Text style={styles.label}>Tiempo comida:</Text>
+                            <View
+                                style={{
+                                    borderWidth: 1,
+                                    borderRadius: 5
+                                }}>
+                                <Picker
+                                    selectedValue={tiempoComida}
+                                    onValueChange={(itemValue, itemIndex) => setTiempoComida(itemValue)}
+                                >
+                                    {optionsTiempoComida.map((option) => (
+                                        <Picker.Item label={option.label} value={option.value} key={option.value} />
+                                    ))}
+                                </Picker>
+                            </View>
 
-                        <Text style={styles.label}>Duración:</Text>
-                        <TouchableOpacity onPress={() => showMode('time')} style={styles.btnDuracion}>
-                            <Text style={styles.txtDuracion}>Seleccionar duración</Text>
-                        </TouchableOpacity>
-                        {duracion.length > 0 ? (
-                            <Text>Duración seleccionada: {duracion}</Text>
-                        ) : (
-                            <Text></Text>
-                        )}
-                        {show && (
-                            <DateTimePicker
-                                testID="'dateTimePicker"
-                                value={date}
-                                mode={mode}
-                                is24Hour={true}
-                                display="default"
-                                onChange={onChangeDuracion}
+                            <Text style={styles.label}>Duración:</Text>
+                            <TouchableOpacity onPress={() => showMode('time')} style={styles.btnDuracion}>
+                                <Text style={styles.txtDuracion}>Seleccionar duración</Text>
+                            </TouchableOpacity>
+                            {duracion.length > 0 ? (
+                                <Text>Duración seleccionada: {duracion}</Text>
+                            ) : (
+                                <Text></Text>
+                            )}
+                            {show && (
+                                <DateTimePicker
+                                    testID="'dateTimePicker"
+                                    value={date}
+                                    mode={mode}
+                                    is24Hour={true}
+                                    display="default"
+                                    onChange={onChangeDuracion}
+                                />
+                            )}
+
+                            <Text style={styles.label}>Preparación:</Text>
+                            <TextInput
+                                style={styles.textArea}
+                                multiline={true}
+                                numberOfLines={4}
+                                value={preparacion}
+                                onChangeText={handleInput4Change}
                             />
-                        )}
-
-                        <Text style={styles.label}>Preparación:</Text>
-                        <TextInput
-                            style={styles.textArea}
-                            multiline={true}
-                            numberOfLines={4}
-                            value={preparacion}
-                            onChangeText={handleInput4Change}
-                        />
 
 
-                        <TouchableOpacity
-                            style={styles.confirmarButton}
-                            onPress={() => {
-                                agregarReceta();
-                            }}
-                        >
-                            <Text>Agregar</Text>
-                        </TouchableOpacity>
+                            <TouchableOpacity
+                                style={styles.confirmarButton}
+                                onPress={() => {
+                                    editarReceta();
+                                }}
+                            >
+                                <Text style={styles.btnText}>Editar</Text>
+                            </TouchableOpacity>
+                        </View>
                     </View>
                 </View>
             </ScrollView>
@@ -194,13 +227,18 @@ const AddRecetaPersonal = () => {
     );
 }
 const styles = StyleSheet.create({
+    btnText: {
+        color: '#f5f5f5',
+        textAlign: 'center'
+    },
     txtDuracion: {
-        color: '#fff',
+        color: '#f5f5f5',
+        textAlign: 'center',        
     },
     btnDuracion: {
         backgroundColor: '#26547C',
         padding: 10,
-        borderRadius: 5,
+        borderRadius: 5,        
     },
     confirmarButton: {
         backgroundColor: '#06BA63',
@@ -208,6 +246,7 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         marginTop: 20,
         alignSelf: 'center',
+        width: '100%',
     },
     textArea: {
         borderWidth: 1,
@@ -231,8 +270,11 @@ const styles = StyleSheet.create({
         color: '#000',
     },
     containerBody: {
-        padding: 15,
-        marginTop: 20
+        backgroundColor: '#fff',
+        padding: 25,
+        margin: 25,
+        marginTop: 20,
+        borderRadius: 15,
     },
     btnScreen: {
         backgroundColor: '#3C7A89',

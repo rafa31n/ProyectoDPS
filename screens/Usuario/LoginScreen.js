@@ -33,12 +33,12 @@ const LoginScreen = () => {
                 })
                 .then(data => {
                     console.log(data)
-                    if (data.status == 200) {
+                    if (data.body[0]) {
                         const datosUsuario = { username: usuario, userId: data.body[0].id };
                         AsyncStorage.setItem('datosUsuario', JSON.stringify(datosUsuario));
                         navigation.navigate('Home');
                     } else {
-                        alert('Credenciales incorrectas.');
+                        alert('Las credenciales ingresadas son incorrectas.');
                     }
                 })
                 .catch(error => {
@@ -51,7 +51,7 @@ const LoginScreen = () => {
     return (
         <View style={styles.container}>
             <Image
-                source={require('../src/imgs/logo_v1.png')}
+                source={require('../../src/imgs/logo_v1.png')}
                 style={styles.imgLogo}
             />
             <View style={styles.container_body}>
