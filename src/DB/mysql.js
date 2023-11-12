@@ -107,10 +107,20 @@ function login(tabla, data){
     })
 }
 
+function cambiarContrasena(tabla, data){
+    return new Promise((resolve, reject) => {
+        data.contrasena = sha256(data.contrasena)
+        conexion.query(`UPDATE ${tabla} SET contrasena = ? WHERE id = ?`,[data.contrasena, data.id] ,(error, result) => {
+            return error ? reject(error): resolve(result);
+        })
+    })
+}
+
 module.exports = {
     todos,
     uno,
     agregar,
     eliminar,
-    login
+    login,
+    cambiarContrasena
 }

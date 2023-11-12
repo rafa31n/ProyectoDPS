@@ -18,9 +18,14 @@ function eliminar(body){
     return db.eliminar(TABLA, body);
 }
 
+function cambiarCon(body){
+    return db.cambiarContrasena(TABLA, body);
+}
+
 module.exports = {
     login,
     agregar,
     uno,
     eliminar,
+    cambiarCon
 }

@@ -7,7 +7,9 @@ const router = express.Router();
 router.get('/:id', uno);
 router.post('/login', login);
 router.post('/registro', agregar);
+router.post('/contrasena', cambiarCon);
 router.put('/', eliminar);
+
 
 
 
@@ -37,7 +39,6 @@ async function agregar(req, res, next){
 
 async function eliminar(req, res, next){
     try{
-        console.log(req.body);
         await controlador.eliminar(req.body);
         respuesta.success(req, res, "Usuario eliminardo correctamente", 200);
     }catch(err){
@@ -49,6 +50,16 @@ async function login(req, res, next){
     try{
         const id = await controlador.login(req.body);
         respuesta.success(req, res, id, 200);
+    }catch(err){
+        next(err);
+    } 
+};
+
+async function cambiarCon(req, res, next){
+    try{
+        console.log(req.body);
+        await controlador.cambiarCon(req.body);
+        respuesta.success(req, res, "Contraseña actualizada con exito", 200);
     }catch(err){
         next(err);
     } 

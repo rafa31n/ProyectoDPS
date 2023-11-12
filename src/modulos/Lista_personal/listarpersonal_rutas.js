@@ -1,7 +1,7 @@
 const express = require("express");
 
 const respuesta = require('../../red/respuesta')
-const controlador = require('./listareceta_controller');
+const controlador = require('./listarpersonal_controller');
 const router = express.Router();
 
 router.get('/:id', todos);
