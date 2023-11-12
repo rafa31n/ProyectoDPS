@@ -9,6 +9,7 @@ const ingredientes_personales = require('./modulos/Ingredientes_personales/ingre
 const ingredientes_biblioteca = require('./modulos/Ingredientes_biblioteca/ingredientebiblio_rutas.js')
 const listas_receta = require('./modulos/Listas_recetas/listareceta_rutas.js')
 const listas_personales = require('./modulos/Lista_personal/listarpersonal_rutas.js')
+const articulos_personales = require('./modulos/Articulos_lista_personal/articulos_rutas.js')
 const error = require('./red/error.js')
 
 const app = express();
@@ -28,7 +29,8 @@ app.use('/api/usuario', usuarios)
 app.use('/api/ingrediente_personales', ingredientes_personales)
 app.use('/api/ingrediente_biblioteca', ingredientes_biblioteca)
 app.use('/api/lista_recetas', listas_receta)
-app.use('/api/lista_personal', listas_personales);
+app.use('/api/lista_personal', listas_personales)
+app.use('/api/articulos_personal', articulos_personales)
 app.use(error);
 
 
