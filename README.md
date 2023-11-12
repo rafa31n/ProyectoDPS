@@ -1,7 +1,7 @@
-# Segunda Fase Proyecto
+# Proyecto de cátedra - Fase final
 
 * Rama front-end: "fase2"
-* Rama back-end: "backend"
+* Rama back-end: "dev_api"
 
 # ProyectoDPS - G04T
 
