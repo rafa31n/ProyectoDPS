@@ -7,17 +7,17 @@
 
 Plan2Plate tiene como objetivo ser una alternativa a solución a varios problemas con las compras y la planificación de comidas.
 Funciones:
-* Crear Listas de Compras Personalizadas
-* Agregar Elementos por Categoría
-* Planificar Comidas Semanales
+* Crear listas de compras personalizadas.
+* Creación de recetas personales.
+* Guardar recetas favoritas de la biblioteca.
 
 ## Autores
 
-* Javier Ernesto Pérez Joaquín - Administrador base de datos y pruebas.
+* Javier Ernesto Pérez Joaquín - Programador front-end y pruebas.
 * Fernando José Lemus Mejía - Programador front-end y pruebas.
 * Verónica Alexandra Payés Carballo - Administración y lógica.
-* Rafael Alexander Najarro Campos - Programador back-end y lógica.
-* Yahir Stewart Sibrián Arriola - Programador front-end y diseño.
+* Rafael Alexander Najarro Campos - Programador front-end y consumo back-end.
+* Yahir Stewart Sibrián Arriola - Programador back-end y administrador base de datos.
 
 ## Licencia
 
