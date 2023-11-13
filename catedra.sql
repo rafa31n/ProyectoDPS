@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1:3306
--- Tiempo de generación: 12-11-2023 a las 19:17:58
+-- Tiempo de generación: 13-11-2023 a las 02:29:59
 -- Versión del servidor: 8.0.31
 -- Versión de PHP: 8.0.26
 
@@ -35,7 +35,14 @@ CREATE TABLE IF NOT EXISTS `biblioteca_usuario` (
   PRIMARY KEY (`id`),
   KEY `id_receta_biblio` (`id_receta_biblio`),
   KEY `id_usuario` (`id_foraneo`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Volcado de datos para la tabla `biblioteca_usuario`
+--
+
+INSERT INTO `biblioteca_usuario` (`id`, `id_receta_biblio`, `id_foraneo`) VALUES
+(5, 1, 10);
 
 -- --------------------------------------------------------
 
@@ -52,7 +59,14 @@ CREATE TABLE IF NOT EXISTS `elementos_lista_personal` (
   `cantidad` varchar(30) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `id_foraneo` (`id_foraneo`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Volcado de datos para la tabla `elementos_lista_personal`
+--
+
+INSERT INTO `elementos_lista_personal` (`id`, `id_foraneo`, `nombre`, `tipo`, `cantidad`) VALUES
+(3, 1, 'rinso', 'limpieza', '3');
 
 -- --------------------------------------------------------
 
@@ -69,7 +83,14 @@ CREATE TABLE IF NOT EXISTS `elementos_lista_recetas` (
   `cantidad` varchar(30) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `id_foraneo` (`id_foraneo`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Volcado de datos para la tabla `elementos_lista_recetas`
+--
+
+INSERT INTO `elementos_lista_recetas` (`id`, `id_foraneo`, `nombre`, `tipo`, `cantidad`) VALUES
+(2, 1, 'queso', 'alimento', '1 libra');
 
 -- --------------------------------------------------------
 
@@ -81,10 +102,17 @@ DROP TABLE IF EXISTS `enlace_receta_lista`;
 CREATE TABLE IF NOT EXISTS `enlace_receta_lista` (
   `id` int NOT NULL AUTO_INCREMENT,
   `id_receta` int NOT NULL,
-  `id_foranea` int NOT NULL,
+  `id_foraneo` int NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `id_foranea` (`id_foranea`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  KEY `id_foranea` (`id_foraneo`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Volcado de datos para la tabla `enlace_receta_lista`
+--
+
+INSERT INTO `enlace_receta_lista` (`id`, `id_receta`, `id_foraneo`) VALUES
+(1, 12, 1);
 
 -- --------------------------------------------------------
 
@@ -126,7 +154,14 @@ CREATE TABLE IF NOT EXISTS `ingrediente_personal` (
   `cantidad` varchar(30) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `id_receta` (`id_foraneo`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Volcado de datos para la tabla `ingrediente_personal`
+--
+
+INSERT INTO `ingrediente_personal` (`id`, `id_foraneo`, `nombre`, `tipo`, `cantidad`) VALUES
+(9, 12, 'queso', 'alimento', '1 libra');
 
 -- --------------------------------------------------------
 
@@ -190,7 +225,6 @@ CREATE TABLE IF NOT EXISTS `receta_biblioteca` (
   `tipo_comida` varchar(40) NOT NULL,
   `duracion` time NOT NULL,
   `preparacion` varchar(3000) NOT NULL,
-  `imagen` varchar(200) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
@@ -198,9 +232,9 @@ CREATE TABLE IF NOT EXISTS `receta_biblioteca` (
 -- Volcado de datos para la tabla `receta_biblioteca`
 --
 
-INSERT INTO `receta_biblioteca` (`id`, `titulo`, `tipo_comida`, `duracion`, `preparacion`, `imagen`) VALUES
-(1, 'sadasdas', 'asdasdsa', '03:08:07', 'dassssssssssssssssasdasdasdsad', 'asdasdas'),
-(2, 'test', 'desayuno', '01:02:19', 'asd asdfñlklkasdjflknasdjknfjkadsn nwoiedfoian', 'img.jpg');
+INSERT INTO `receta_biblioteca` (`id`, `titulo`, `tipo_comida`, `duracion`, `preparacion`) VALUES
+(1, 'sadasdas', 'asdasdsa', '03:08:07', 'dassssssssssssssssasdasdasdsad'),
+(2, 'test', 'desayuno', '01:02:19', 'asd asdfñlklkasdjflknasdjknfjkadsn nwoiedfoian');
 
 -- --------------------------------------------------------
 
@@ -215,18 +249,18 @@ CREATE TABLE IF NOT EXISTS `receta_personal` (
   `tiempo_comida` varchar(40) NOT NULL,
   `duracion` time NOT NULL,
   `preparacion` varchar(3000) NOT NULL,
-  `imagen` varchar(200) NOT NULL,
   `id_foraneo` int NOT NULL,
   PRIMARY KEY (`id`),
   KEY `id_usuario` (`id_foraneo`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Volcado de datos para la tabla `receta_personal`
 --
 
-INSERT INTO `receta_personal` (`id`, `titulo`, `tiempo_comida`, `duracion`, `preparacion`, `imagen`, `id_foraneo`) VALUES
-(12, 'carne a la plancha', 'cena', '01:00:00', 'sadksadjasldlkasjdlkhasjkldhaslkjdlkasjd', 'pic.img', 10);
+INSERT INTO `receta_personal` (`id`, `titulo`, `tiempo_comida`, `duracion`, `preparacion`, `id_foraneo`) VALUES
+(12, 'carne a la plancha', 'cena', '01:00:00', 'sadksadjasldlkasjdlkhasjkldhaslkjdlkasjd', 10),
+(14, 'pollo', 'cena', '01:00:00', 'sadksadjasldlkasjdlkhasjkldhaslkjdlkasjd', 10);
 
 -- --------------------------------------------------------
 
@@ -276,6 +310,12 @@ ALTER TABLE `elementos_lista_personal`
 --
 ALTER TABLE `elementos_lista_recetas`
   ADD CONSTRAINT `elementos_lista_recetas_ibfk_1` FOREIGN KEY (`id_foraneo`) REFERENCES `listas_receta` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Filtros para la tabla `enlace_receta_lista`
+--
+ALTER TABLE `enlace_receta_lista`
+  ADD CONSTRAINT `enlace_receta_lista_ibfk_1` FOREIGN KEY (`id_foraneo`) REFERENCES `lista_personal` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Filtros para la tabla `ingredientes_biblioteca`
