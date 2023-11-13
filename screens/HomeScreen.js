@@ -3,12 +3,20 @@ import { StyleSheet, View, Text, TouchableOpacity, Image, ScrollView } from "rea
 import { useRoute } from '@react-navigation/native';
 import { useNavigation } from "@react-navigation/native";
 import Icon from 'react-native-vector-icons/EvilIcons';
+import IconAD from 'react-native-vector-icons/AntDesign';
+import Modal from "react-native-modal";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const HomeScreen = () => {
     const route = useRoute();
     const navigation = useNavigation();
     const [datosUsuario, setDatosUsuario] = useState(null);
+    const [modalLogOut, setModalLogOut] = useState(false);
+
+    const logout = () => {
+        AsyncStorage.removeItem('datosUsuario');
+        navigation.navigate('Login')
+    }
 
     useEffect(() => {
         AsyncStorage.getItem('datosUsuario')
@@ -25,8 +33,41 @@ const HomeScreen = () => {
 
     return (
         <View style={styles.componentContainer}>
+            <Modal isVisible={modalLogOut}>
+                <View style={styles.modalContainer}>
+                    <Text style={styles.modalText}>
+                        ¿Desea cerrar sesión?
+                    </Text>
+                    <View style={styles.containerButtonsModal}>
+                        <TouchableOpacity
+                            style={styles.confirmarButtonPass}
+                            onPress={() => {
+                                logout();
+                            }}
+                        >
+                            <Text style={styles.btnEditPerfilTxt}>Confirmar</Text>
+                        </TouchableOpacity>
+
+                        <TouchableOpacity
+                            style={styles.cancelarButton}
+                            onPress={() => {
+                                setModalLogOut(false);
+                            }}
+                        >
+                            <Text style={styles.btnEditPerfilTxt}>Cancelar</Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+            </Modal>
+
             <ScrollView>
                 <View style={styles.headerContainer}>
+                    <TouchableOpacity
+                        style={styles.buttonLogin}
+                        onPress={() => navigation.navigate('Perfil')}>
+                        <Icon style={styles.icon}
+                            name='user' color='white' size={50} />
+                    </TouchableOpacity>
 
                     <View style={styles.centerElement}>
                         {datosUsuario ? (
@@ -37,25 +78,18 @@ const HomeScreen = () => {
                     </View>
                     <View style={styles.rightElement}>
                         <TouchableOpacity
-                            style={styles.buttonLogin}
-                            onPress={() => navigation.navigate('Perfil')}>
-                            <Icon style={styles.icon}
-                                name='user' color='white' size={50} />
+                            style={styles.buttonLogOut}
+                            onPress={() => setModalLogOut(true)}>
+                            <IconAD style={styles.icon}
+                                name='logout' color='white' size={30} />
                         </TouchableOpacity>
+
                     </View>
                 </View>
 
                 <View style={styles.container_body}>
-
-                    <TouchableOpacity onPress={() => navigation.navigate('AgregarIngredientes')}>
-                        <View style={styles.articleContainer}>
-                            <Image style={styles.image}
-                                source={{ uri: 'https://cdn-icons-png.flaticon.com/512/4543/4543179.png' }} />
-                            <Text style={styles.articelTitle}>Listas de recetas</Text>
-                        </View>
-                    </TouchableOpacity>
-
-                    <TouchableOpacity onPress={() => navigation.navigate('AgregarIngredientes')}>
+                    
+                    <TouchableOpacity onPress={() => navigation.navigate('ListaPersonal')}>
                         <View style={styles.articleContainer}>
                             <Image style={styles.image}
                                 source={require('../src/imgs/lista_personal.jpeg')} />
@@ -94,6 +128,44 @@ const HomeScreen = () => {
 };
 
 const styles = StyleSheet.create({
+    btnEditPerfilTxt: {
+        color: '#f5f5f5',
+        fontWeight: 'bold'
+    },
+    confirmarButtonPass: {
+        backgroundColor: '#c13145',
+        padding: 10,
+        borderRadius: 5,
+        marginTop: 10,
+        alignSelf: 'center',
+    },
+    containerButtonsModal: {
+        flexDirection: "row",
+        width: '80%',
+        justifyContent: "space-around",
+        alignItems: "center",
+    },
+    modalContainer: {
+        backgroundColor: 'white',
+        padding: 20,
+        borderRadius: 10,
+        alignItems: 'center',
+    },
+    modalContainerInputs: {
+        width: '80%',
+        marginBottom: 25,
+    },
+    modalText: {
+        fontSize: 18,
+        marginBottom: 10,
+    },
+    cancelarButton: {
+        backgroundColor: 'gray',
+        padding: 10,
+        borderRadius: 5,
+        marginTop: 10,
+        alignSelf: 'center',
+    },
     icon: {
         padding: 5,
     },
@@ -107,16 +179,19 @@ const styles = StyleSheet.create({
     },
     rightElement: {
         marginLeft: 16,
-        marginRight: 25,
         marginTop: 8,
+        flexDirection: 'row',
     },
     centerElement: {
         marginBottom: 20,
-        width: '80%',
+        width: '60%',
         height: '100%',
     },
     buttonLogin: {
-        marginRight: 20,
+        margin: 10,
+    },
+    buttonLogOut: {
+        margin: 5,
     },
     header: {
         fontWeight: "bold",

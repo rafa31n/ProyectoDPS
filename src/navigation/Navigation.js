@@ -15,8 +15,13 @@ import EditRecetaPersonal from '../../screens/Recetas/EditRecetaPersonal';
 import IngredienteReceta from '../../screens/Recetas/IngredientesReceta';
 import Recetas from '../../screens/Recetas/RecetasPersonales';
 import MisRecetas from '../../screens/Recetas/RecetasFavoritas';
-//LISTAS
-import ListaIngredientes from '../../screens/Listas/ListaDeCompra';
+//LISTAS A PARTIR DE RECETAS
+import ListaDeReceta from '../../screens/Listas/ListaDeRecetas';
+//LISTAS PERSONALES
+import ListaPersonal from '../../screens/Listas/ListaPersonal';
+import AddListaPersonal from '../../screens/Listas/AddListaPersonal';
+import EditListaPersonal from '../../screens/Listas/EditListaPersonal';
+import ArticulosListaPersonal from '../../screens/Listas/ArticulosListaPersonal';
 
 const Stack = createNativeStackNavigator();
 
@@ -26,7 +31,7 @@ const Navigation = () => {
             <Stack.Navigator screenOptions={{ headerShown: false }}>
                 <Stack.Screen name='Login' component={Login} />
                 <Stack.Screen name='Home' component={Home} />
-                <Stack.Screen name='AgregarIngredientes' component={ListaIngredientes} />
+                <Stack.Screen name='ListaDeReceta' component={ListaDeReceta} />
                 <Stack.Screen name='Google' component={Google} />
                 <Stack.Screen name='Register' component={Register} />
                 <Stack.Screen name='AgregarRecetas' component={Recetas} />
@@ -36,6 +41,10 @@ const Navigation = () => {
                 <Stack.Screen name='AddRecetaPersonal' component={AddRecetaPersonal} />
                 <Stack.Screen name='EditRecetaPersonal' component={EditRecetaPersonal} />
                 <Stack.Screen name='IngredienteReceta' component={IngredienteReceta} />
+                <Stack.Screen name='ListaPersonal' component={ListaPersonal} />
+                <Stack.Screen name='AddListaPersonal' component={AddListaPersonal} />
+                <Stack.Screen name='EditListaPersonal' component={EditListaPersonal} />
+                <Stack.Screen name='ArticulosListaPersonal' component={ArticulosListaPersonal} />
             </Stack.Navigator>
         </NavigationContainer>
     )

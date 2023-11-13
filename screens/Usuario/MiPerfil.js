@@ -12,6 +12,7 @@ const ProfileScreen = () => {
   const navigation = useNavigation();
   const [datosUsuario, setDatosUsuario] = useState(null);
   const [editModalVisible, setEditModalVisible] = useState(false);
+  const [modalContrasena, setModalContrasena] = useState(false);
 
   const [primerNombre, setPrimerNombre] = useState('');
   const [segundoNombre, setSegundoNombre] = useState('');
@@ -21,7 +22,10 @@ const ProfileScreen = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
-  const abrirModal = (item) => {
+  const [pass1, setPass1] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+
+  const abrirModal = () => {
     setEditModalVisible(true);
 
     setPrimerNombre(datosUsuario.body[0].primer_nombre)
@@ -50,6 +54,12 @@ const ProfileScreen = () => {
   };
   const handleInput6Change = (text) => {
     setUsername(text)
+  };
+  const handleConfirmPass = (text) => {
+    setConfirmPassword(text)
+  };
+  const handlePass1 = (text) => {
+    setPass1(text)
   };
 
   const confirmarEditar = () => {
@@ -108,6 +118,53 @@ const ProfileScreen = () => {
       alert("Completa todos los campos solicitados.")
     }
   }
+
+  const confirmarCambiarContrasena = () => {
+    if (pass1 == confirmPassword && pass1.length > 0 && confirmPassword.length > 0) {
+      AsyncStorage.getItem('datosUsuario')
+        .then((data) => {
+          if (data) {
+            const datos = JSON.parse(data);
+            const postData = {
+              id: datos.userId,
+              contrasena: pass1
+            }
+
+            fetch('http://10.0.2.2:4000/api/usuario/contrasena', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify(postData),
+            })
+              .then(response => {
+                if (response.ok) {
+                  return response.json();
+                } else {
+                  throw new Error('Error en la solicitud POST');
+                }
+              })
+              .then(data => {                
+                alert(data.body)
+                setModalContrasena(false)
+              })
+              .catch(error => {
+                console.error('Error al realizar la solicitud:', error);
+                alert('Error al realizar la solicitud.')
+              });
+          }
+        })
+        .catch((error) => {
+          console.error('Error al recuperar datos de AsyncStorage:', error);
+        });
+    } else {
+      alert('Completa todos los campos solicitados.');
+    }
+  }
+
+  const cambiarPassword = () => {
+    setModalContrasena(true);
+  };
 
   useEffect(() => {
     AsyncStorage.getItem('datosUsuario')
@@ -197,6 +254,52 @@ const ProfileScreen = () => {
         </View>
       </Modal>
 
+      {/*---Cambiar contraseña modal---*/}
+      <Modal isVisible={modalContrasena}>
+        <View style={styles.modalContainer}>
+          {datosUsuario ? (
+            <View style={styles.modalContainerInputs}>
+              {datosUsuario.body.map((item, index) => (
+                <View key={index}>
+                  <Text style={styles.label}>Nueva contraseña:</Text>
+                  <TextInput style={styles.txtInput}
+                    value={pass1}
+                    secureTextEntry={true}
+                    onChangeText={handlePass1}></TextInput>
+
+                  <Text style={styles.label}>Confirmar contraseña:</Text>
+                  <TextInput style={styles.txtInput}
+                    value={confirmPassword}
+                    secureTextEntry={true}
+                    onChangeText={handleConfirmPass}></TextInput>
+                </View>
+              ))}
+            </View>
+          ) : (
+            <View></View>
+          )}
+
+          <View style={styles.containerButtonsModal}>
+            <TouchableOpacity
+              style={styles.confirmarButtonPass}
+              onPress={() => {
+                confirmarCambiarContrasena();
+              }}
+            >
+              <Text style={styles.btnEditPerfilTxt}>Confirmar</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.cancelarButton}
+              onPress={() => {
+                setModalContrasena(false);
+              }}
+            >
+              <Text style={styles.btnEditPerfilTxt}>Cancelar</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+
       <ScrollView>
         <View style={styles.headerContainer}>
           <View style={styles.leftElement}>
@@ -250,7 +353,7 @@ const ProfileScreen = () => {
 
                 <TouchableOpacity
                   style={styles.btnEditPassword}
-                  onPress={() => console.log("cambiar contra")}>
+                  onPress={() => cambiarPassword()}>
                   <Text style={{ color: '#fff' }}>Cambiar contraseña</Text>
                 </TouchableOpacity>
               </View>
@@ -266,6 +369,13 @@ const ProfileScreen = () => {
 };
 
 const styles = StyleSheet.create({
+  confirmarButtonPass: {
+    backgroundColor: '#c13145',
+    padding: 10,
+    borderRadius: 5,
+    marginTop: 10,
+    alignSelf: 'center',
+  },
   confirmarButton: {
     backgroundColor: '#06BA63',
     padding: 10,
@@ -412,7 +522,7 @@ const styles = StyleSheet.create({
     marginBottom: 2,
     borderRadius: 15,
     color: '#000',
-  }
+  },
 });
 
 export default ProfileScreen;
